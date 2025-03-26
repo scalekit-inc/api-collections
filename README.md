@@ -1,4 +1,4 @@
-# API Collections
+# Scalekit API Collections
 
 This directory contains API collections that help you explore and test Scalekit APIs in various API platforms and tools.
 
