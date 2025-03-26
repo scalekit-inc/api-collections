@@ -1,6 +1,6 @@
 # Scalekit API Collections
 
-This directory contains API collections that help you explore and test Scalekit APIs in various API platforms and tools.
+This directory contains API collections that help you explore and test Scalekit APIs in various API platforms and tools. [Refer to spec folder for the latest OpenAPI spec](/spec/).
 
 ## Available Collections
 
