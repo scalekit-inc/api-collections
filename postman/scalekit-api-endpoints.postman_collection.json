@@ -5,7 +5,7 @@
 		"description": "Explore APIs from Scalekit on this workspace. It lets you build enterprise grade authentication for you and your customers.\n\n[Sign up](https://www.scalekit.com) for an account and grab the credentials to start playing with the APIs. See developer documentation to dive deeper.\n\n**In this API Collections:**\n\n- **Getting Started** lets you use the credentials and get the `access_token` required to play with rest of the APIs.\n    \n- **Single Sign On** API collections contains APIs that redirects your users (from browser) to authenticate with their chosen Identity Provider (IdPs) and get your app the user profile details.\n    \n- With **Organization APIs,** manage your create and manage customer accounts and details.\n    \n- Let your users configure their own Authentication from your app using **Admin Portal APIs**.\n    \n- Control the SSO connections in a organization to enable and disable it real-time using **Connection APIs**",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "36340097",
-		"_collection_link": "https://scalekit.postman.co/workspace/8b9d9569-f604-4717-9944-fa26706e96f3/collection/36340097-d3fa4f3c-5b67-470a-aa03-906ec34d6e25?action=share&source=collection_link&creator=36340097"
+		"_collection_link": "https://scalekit.postman.co/workspace/Scalekit~8b9d9569-f604-4717-9944-fa26706e96f3/collection/36340097-d3fa4f3c-5b67-470a-aa03-906ec34d6e25?action=share&source=collection_link&creator=36340097"
 	},
 	"item": [
 		{
@@ -91,13 +91,13 @@
 									"urlencoded": [
 										{
 											"key": "client_id",
-											"value": "skc_58327482062864390",
+											"value": "{{client_id}}",
 											"description": "Client ID is public identifer for Scalekit to identify your app",
 											"type": "text"
 										},
 										{
 											"key": "client_secret",
-											"value": "•••••••",
+											"value": "{{client_secret}}",
 											"description": "Client secret is private key for Scalekit to verify your app",
 											"type": "text"
 										},
@@ -109,12 +109,9 @@
 									]
 								},
 								"url": {
-									"raw": "https://scalekit-z44iroqaaada-dev.scalekit.cloud/oauth/token",
-									"protocol": "https",
+									"raw": "{{env_url}}/oauth/token",
 									"host": [
-										"scalekit-z44iroqaaada-dev",
-										"scalekit",
-										"cloud"
+										"{{env_url}}"
 									],
 									"path": [
 										"oauth",
@@ -195,18 +192,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://scalekit-z44iroqaaada-dev.scalekit.cloud/api/v1/clients/skc_58327482062864390",
-									"protocol": "https",
+									"raw": "{{env_url}}/api/v1/clients/{{client_id}}",
 									"host": [
-										"scalekit-z44iroqaaada-dev",
-										"scalekit",
-										"cloud"
+										"{{env_url}}"
 									],
 									"path": [
 										"api",
 										"v1",
 										"clients",
-										"skc_58327482062864390"
+										"{{client_id}}"
 									]
 								}
 							},
@@ -322,18 +316,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://scalekit-z44iroqaaada-dev.scalekit.cloud/api/v1/clients/skc_58327482062864390",
-									"protocol": "https",
+									"raw": "{{env_url}}/api/v1/clients/{{client_id}}",
 									"host": [
-										"scalekit-z44iroqaaada-dev",
-										"scalekit",
-										"cloud"
+										"{{env_url}}"
 									],
 									"path": [
 										"api",
 										"v1",
 										"clients",
-										"skc_58327482062864390"
+										"{{client_id}}"
 									]
 								}
 							},
@@ -586,12 +577,9 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://scalekit-z44iroqaaada-dev.scalekit.cloud/oauth/authorize?client_id=skc_58327482062864390&redirect_uri=https://demo.scalekit.com/auth/callback&response_type=code&scope=openid email profile&organization_id=org_59615193906282635",
-									"protocol": "https",
+									"raw": "{{env_url}}/oauth/authorize?client_id={{client_id}}&redirect_uri=https://demo.scalekit.com/auth/callback&response_type=code&scope=openid email profile&organization_id={{organization_id}}",
 									"host": [
-										"scalekit-z44iroqaaada-dev",
-										"scalekit",
-										"cloud"
+										"{{env_url}}"
 									],
 									"path": [
 										"oauth",
@@ -600,7 +588,7 @@
 									"query": [
 										{
 											"key": "client_id",
-											"value": "skc_58327482062864390",
+											"value": "{{client_id}}",
 											"description": "The unique identifier for your Scalekit application."
 										},
 										{
@@ -619,7 +607,7 @@
 										},
 										{
 											"key": "organization_id",
-											"value": "org_59615193906282635",
+											"value": "{{organization_id}}",
 											"description": "The unique identifier for the customer's organization. Based on the supplied `org_id`, the user will be redirected to the Identity Provider configured for the SSO connection associated with that organization."
 										}
 									]
@@ -877,12 +865,9 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://scalekit-z44iroqaaada-dev.scalekit.cloud/api/v1/organizations?page_size=2",
-									"protocol": "https",
+									"raw": "{{env_url}}/api/v1/organizations?page_size=2",
 									"host": [
-										"scalekit-z44iroqaaada-dev",
-										"scalekit",
-										"cloud"
+										"{{env_url}}"
 									],
 									"path": [
 										"api",
@@ -1125,12 +1110,9 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://scalekit-z44iroqaaada-dev.scalekit.cloud/api/v1/organizations?page_size=2",
-									"protocol": "https",
+									"raw": "{{env_url}}/api/v1/organizations?page_size=2",
 									"host": [
-										"scalekit-z44iroqaaada-dev",
-										"scalekit",
-										"cloud"
+										"{{env_url}}"
 									],
 									"path": [
 										"api",
@@ -1380,12 +1362,12 @@
 					]
 				},
 				{
-					"name": "Get Organization by ID",
+					"name": "Get Organization by external ID",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{env_url}}/api/v1/organizations?external_id=link44",
+							"raw": "{{env_url}}/api/v1/organizations?external_id=link45",
 							"host": [
 								"{{env_url}}"
 							],
@@ -1397,7 +1379,7 @@
 							"query": [
 								{
 									"key": "external_id",
-									"value": "link44"
+									"value": "link45"
 								}
 							]
 						}
@@ -1576,7 +1558,7 @@
 					]
 				},
 				{
-					"name": "Get Organization by external ID",
+					"name": "Get Organization by ID",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1687,6 +1669,100 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"organization\": {\n        \"id\": \"org_59615694236418891\",\n        \"create_time\": \"2025-02-15T06:28:42.780Z\",\n        \"update_time\": \"2025-02-15T06:28:43.110920Z\",\n        \"display_name\": \"BugJam\",\n        \"region_code\": \"US\",\n        \"metadata\": {},\n        \"settings\": {\n            \"features\": [\n                {\n                    \"name\": \"sso\",\n                    \"enabled\": true\n                },\n                {\n                    \"name\": \"dir_sync\",\n                    \"enabled\": false\n                }\n            ]\n        }\n    }\n}"
+						},
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/organizations/{{example_org}}",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"organizations",
+										"{{example_org}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "grpc-metadata-content-type",
+									"value": "application/grpc"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Status"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Message"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Status-Details-Bin"
+								},
+								{
+									"key": "grpc-metadata-x-trace-id",
+									"value": "8114aacbb18c0ffc370e4ebcee2aa07b"
+								},
+								{
+									"key": "vary",
+									"value": "Origin"
+								},
+								{
+									"key": "x-trace-id",
+									"value": "8114aacbb18c0ffc370e4ebcee2aa07b"
+								},
+								{
+									"key": "Content-Length",
+									"value": "345"
+								},
+								{
+									"key": "date",
+									"value": "Wed, 26 Mar 2025 13:32:36 GMT"
+								},
+								{
+									"key": "via",
+									"value": "1.1 google"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache, no-store, must-revalidate"
+								},
+								{
+									"key": "permissions-policy",
+									"value": "()"
+								},
+								{
+									"key": "referrer-policy",
+									"value": "strict-origin-when-cross-origin"
+								},
+								{
+									"key": "strict-transport-security",
+									"value": "max-age=31536000; includeSubDomains; preload"
+								},
+								{
+									"key": "x-content-type-options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Alt-Svc",
+									"value": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"organization\": {\n        \"id\": \"org_64444217115541813\",\n        \"create_time\": \"2025-03-20T13:55:46.690Z\",\n        \"update_time\": \"2025-03-26T13:31:44.179734Z\",\n        \"display_name\": \"Looney Corp\",\n        \"region_code\": \"US\",\n        \"external_id\": \"link45\",\n        \"metadata\": {\n            \"property1\": \"value1\"\n        },\n        \"settings\": {\n            \"features\": [\n                {\n                    \"name\": \"dir_sync\",\n                    \"enabled\": false\n                },\n                {\n                    \"name\": \"login_box\",\n                    \"enabled\": true\n                }\n            ]\n        }\n    }\n}"
 						}
 					]
 				},
@@ -1697,7 +1773,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"external_id\": \"link44\",\n    \"metadata\": {\n        \"property1\": \"value1\"\n    }\n}",
+							"raw": "{\n    \"external_id\": \"link45\",\n    \"metadata\": {\n        \"property1\": \"value1\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
