@@ -51,7 +51,7 @@
           }
         }
       },
-      "put": {
+      "patch": {
         "description": "Replaces the entire client configuration with the provided values. Required fields: redirect_uris, default_redirect_uri. Immutable fields: id, create_time",
         "tags": [
           "Client Configs"
@@ -61,7 +61,7 @@
         "parameters": [
           {
             "type": "string",
-            "description": "Unique identifier for your client application. Find this in Settings \u003e API Credentials",
+            "description": "Unique identifier of the registered application to update. Must start with 'skc_' prefix",
             "name": "client_id",
             "in": "path",
             "required": true
@@ -71,13 +71,15 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1clientsUpdateClient"
+              "description": "Application configuration parameters to update. Contains redirect URIs and authentication settings",
+              "$ref": "#/definitions/v1clientsUpdateClient",
+              "example": {
+                "default_redirect_uri": "https://app.example.com/callback",
+                "redirect_uris": [
+                  "https://app.example.com/callback"
+                ]
+              }
             }
-          },
-          {
-            "type": "string",
-            "name": "mask",
-            "in": "query"
           }
         ],
         "responses": {
@@ -94,7 +96,7 @@
       "get": {
         "description": "Retrieves a list of connections in the environment",
         "tags": [
-          "Connection"
+          "Connections"
         ],
         "summary": "List Connections",
         "operationId": "ConnectionService_ListConnections",
@@ -388,7 +390,7 @@
       "get": {
         "description": "Retrieves the complete configuration and status details for a specific connection by its ID within an organization. Returns all connection properties including provider settings, protocols, and current status.",
         "tags": [
-          "Connection"
+          "Connections"
         ],
         "summary": "Get Connection details",
         "operationId": "ConnectionService_GetConnection",
@@ -422,7 +424,7 @@
       "patch": {
         "description": "Deactivate an existing connection for the specified organization. When disabled, users cannot authenticate using this connection. This endpoint changes the connection state from enabled to disabled without modifying other configuration settings",
         "tags": [
-          "Connection"
+          "Connections"
         ],
         "summary": "Disable Organization Connection",
         "operationId": "ConnectionService_DisableConnection",
@@ -456,7 +458,7 @@
       "patch": {
         "description": "Activate an existing connection for the specified organization. When enabled, users can authenticate using this connection. This endpoint changes the connection state from disabled to enabled without modifying other configuration settings",
         "tags": [
-          "Connection"
+          "Connections"
         ],
         "summary": "Enable Organization Connection",
         "operationId": "ConnectionService_EnableConnection",
@@ -1165,6 +1167,7 @@
       "type": "object",
       "properties": {
         "client": {
+          "description": "Updated application configuration with all current settings reflected in the response",
           "$ref": "#/definitions/clientsClient"
         }
       }
@@ -1287,6 +1290,13 @@
       "enum": [
         "ACTIVE",
         "INACTIVE"
+      ]
+    },
+    "connectionsCodeChallengeType": {
+      "type": "string",
+      "enum": [
+        "NUMERIC",
+        "ALPHANUMERIC"
       ]
     },
     "connectionsConfigurationType": {
@@ -1672,10 +1682,26 @@
     "connectionsPasswordLessConfig": {
       "type": "object",
       "properties": {
+        "code_challenge_length": {
+          "description": "Code Challenge Length",
+          "type": "integer",
+          "format": "int64",
+          "example": 6
+        },
+        "code_challenge_type": {
+          "description": "Code Challenge Type",
+          "$ref": "#/definitions/connectionsCodeChallengeType",
+          "example": "NUMERIC"
+        },
+        "enforce_same_browser_origin": {
+          "description": "Enforce Same Browser Origin",
+          "type": "boolean",
+          "example": true
+        },
         "frequency": {
           "description": "Link Frequency",
           "type": "integer",
-          "format": "int32",
+          "format": "int64",
           "example": 1
         },
         "type": {
@@ -1684,9 +1710,10 @@
           "example": "LINK"
         },
         "validity": {
-          "description": "Link Validity",
-          "type": "string",
-          "example": "24h"
+          "description": "Link Validity in Seconds",
+          "type": "integer",
+          "format": "int64",
+          "example": "600"
         }
       }
     },
@@ -2617,28 +2644,46 @@
       }
     },
     "v1clientsUpdateClient": {
+      "description": "Parameters for updating a registered Scalekit application's configuration",
       "type": "object",
+      "title": "Update Application Configuration",
       "properties": {
         "back_channel_logout_uri": {
-          "type": "string"
+          "description": "HTTPS endpoint for receiving back-channel logout notifications. Required for application-initiated logout flows",
+          "type": "string",
+          "example": "https://app.example.com/backchannel-logout"
         },
         "default_redirect_uri": {
-          "type": "string"
+          "description": "Primary redirect URI used when none is specified in authorization requests. Must match one of the redirect_uris",
+          "type": "string",
+          "example": "https://app.example.com/callback"
         },
         "initiate_login_uri": {
-          "type": "string"
+          "description": "Pre-configured URI for initiating login flows. Must use HTTPS and contain a valid domain",
+          "type": "string",
+          "example": "https://app.example.com/login"
         },
         "post_logout_redirect_uris": {
+          "description": "Allowed URIs for post-logout redirection. Must use HTTPS and conform to security specifications",
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "example": [
+            "https://app.example.com/logged-out",
+            "https://app.example.com/home"
+          ]
         },
         "redirect_uris": {
+          "description": "List of allowed redirect URIs for authentication flows. Must be valid URIs and use HTTPS in production",
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "example": [
+            "https://app.example.com/callback",
+            "https://dev.example.com/auth"
+          ]
         }
       }
     },
@@ -2740,27 +2785,24 @@
       "name": "Organizations"
     },
     {
+      "description": "User management endpoints for individual accounts within the organization. These endpoints allow for creating, reading, updating, and deleting user accounts, as well as managing user roles and permissions for accessing organizational resources.",
+      "name": "Users"
+    },
+    {
       "description": "The Directory API lets you connect external identity providers to your organizations. Use these endpoints to view users and groups, enable or disable directory connections, and configure access settings. Supports identity systems like Okta, Microsoft Entra ID, and Google Workspace through standard protocols.",
       "name": "Directory"
     },
     {
       "description": " Connection represents a unique Single Sign-on instance for an Organization. Connection has the configuration needed to establish an SSO and exchange user information securely between Scalekit and your customer's Identity Provider. Depending on the connection type parameter, the corresponding configuration details are found in `oidc_config` or `saml_config` parameter.\n\u003c!--\n**Connection Attributes**\n\n| Attribute Name | Attribute Description |\n|---|---|\n| `id`\u003cbr\u003e_string_ | Unique ID of an SSO Connection. This attribute is required for all API operations to be performed against this connection.  |\n| `provider`\u003cbr\u003e_ENUM_ | Name of the Identity Provider. Possible Values are: `OKTA`, `GOOGLE`, `MICROSOFT_AD`, `AUTH0`, `ONELOGIN`, `PING_IDENTITY`, `JUMPCLOUD`, `CUSTOM` |\n| `type`\u003cbr\u003e_ENUM_ | Protocol type that is used for this connection. Possible values are `SAML` or `OIDC` |\n| `status`\u003cbr\u003e_ENUM_ | Indicates the configuration progress status of the SSO Connection. Possible Values are `DRAFT`, `INPROGRESS`, `COMPLETED`. \u003cbr\u003e_Note_: This doesn't indicate whether this connection is active or not. |\n| `enabled`\u003cbr\u003e_boolean_ | Indicates whether this connection is active or not. Users can only login via active SSO connections. |\n| `organization_id`\u003cbr\u003e_string_ | Organization ID to which this SSO connection belongs to. |\n| `saml_config`\u003cbr\u003e_Object_ | If this connection is of type `SAML`, the configuration details are found in this object. |\n| `oidc_config`\u003cbr\u003e_Object_ | If this connection is of type `OIDC`, the configuration details are found in this object. |\n| `attribute_mapping`\u003cbr\u003e_Object_ | Array of attribute mappings using which the user information received from the Identity Provider is normalized. Example: \u003ccode\u003e \u003cbr/\u003e{ \u003cbr/\u003e\u0026nbsp;\u0026nbsp; \"email\": \"email\",\u003cbr/\u003e\u0026nbsp;\u0026nbsp; \"family_name\": \"lastName\", \u003cbr/\u003e\u0026nbsp;\u0026nbsp; \"given_name\": \"firstName\",\u003cbr/\u003e\u0026nbsp;\u0026nbsp;\u0026nbsp;\"sub\": \"nameid\" \u003cbr/\u003e} \u003c/code\u003e |\n| `create_time` | Timestamp at which this connection record was created in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format. For Example: `2021-10-05T14:48:00.000Z` |\n| `update_time`\u003cbr\u003e_string_ | Timestamp at which this connection record was last updated in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format. For Example: `2021-10-10T14:48:00.000Z` | --\u003e\n",
-      "name": "Connection"
+      "name": "Connections"
     },
     {
-      "name": "ConnectionService"
+      "description": "Endpoints for managing client application configurations. Registered client applications can use these endpoints to retrieve and modify their configuration settings, including redirect URIs and other client-specific parameters.",
+      "name": "Client Configs"
     },
     {
-      "name": "DirectoryService"
-    },
-    {
-      "name": "UserService"
-    },
-    {
-      "name": "RolesService"
-    },
-    {
-      "name": "ClientService"
+      "description": "Endpoints for managing roles and permissions for users and organizations. More APIs coming soon",
+      "name": "Roles"
     }
   ],
   "externalDocs": {
