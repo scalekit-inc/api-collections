@@ -1,0 +1,30 @@
+meta {
+  name: Enable a Connection_1
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{env_url}}/api/v1/organizations/{{organization_id}}/connections/{{connection_id}}:disable
+  body: none
+  auth: oauth2
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: {{env_url}}/oauth/token
+  refresh_token_url: {{env_url}}/oauth/token
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+  scope: 
+  credentials_placement: body
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: 
+  auto_fetch_token: true
+  auto_refresh_token: false
+}

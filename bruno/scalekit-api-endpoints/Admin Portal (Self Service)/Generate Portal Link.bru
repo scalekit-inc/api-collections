@@ -1,0 +1,25 @@
+meta {
+  name: Generate Portal Link
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{env_url}}/api/v1/organizations/{{example_org}}/portal_links
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  [
+      
+  ]
+}

@@ -1,0 +1,39 @@
+meta {
+  name: Authorization URL
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{env_url}}/oauth/authorize?client_id={{client_id}}&redirect_uri={{redirect_uri}}&response_type=code&scope=openid email profile&organization_id={{organization_id}}
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  client_id: {{client_id}}
+  redirect_uri: {{redirect_uri}}
+  response_type: code
+  scope: openid email profile
+  organization_id: {{organization_id}}
+  ~connection_id: {{connection_id}}
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: {{env_url}}/oauth/token
+  refresh_token_url: {{env_url}}/oauth/token
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+  scope: 
+  credentials_placement: body
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: 
+  auto_fetch_token: true
+  auto_refresh_token: false
+}
+
+docs {
+  This endpoint won't work as intended. The issue lies in how these endpoints simulate user login, which Postman can't handle effectively. Postman doesn't continue loading the login box or follow redirects in this scenario.
+}

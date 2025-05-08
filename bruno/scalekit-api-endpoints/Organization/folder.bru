@@ -1,0 +1,81 @@
+meta {
+  name: Organization
+}
+
+auth {
+  mode: oauth2
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: {{env_url}}/oauth/token
+  refresh_token_url: {{env_url}}/oauth/token
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+  scope: 
+  credentials_placement: body
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: 
+  auto_fetch_token: true
+  auto_refresh_token: false
+}
+
+docs {
+  Organization represents a customer or a tenant of your application. Use this to create enterprise Single Sign-on connections or Admin Portal links for your customers.
+  
+  ## **Attributes**
+  
+  **`id`** string  
+  Unique ID of the organization
+  
+  ---
+  
+  **`display_name`** string  
+  Display Name of the Organization
+  
+  ---
+  
+  **`external_id`** string  
+  Unique ID of this organization according to your system. You can store your unique ID for this organization in Scalekit's system and later use this to fetch Organization and Connection details. This is helpful if you don't want to persist Scalekit's Unique Identifiers in your database
+  
+  ---
+  
+  **`metadata`** map  
+  Set of key-value pairs that you can attach to the Organization object. This can be useful for storing additional information about the Organization in a structured format.
+  
+  ---
+  
+  **`region_code`** enum
+  
+  Region in which this organization data is stored in. By default, the environment's `region_code` is used to store this organization's data
+  
+  _Possible values:_ `US` , `EU`
+  
+  ---
+  
+  **`create_time`** string  
+  Timestamp at which this organization record was created in ISO 8601 format
+  
+  ---
+  
+  **`update_time`** string  
+  Timestamp at which this organization record was last updated in ISO 8601 format
+  
+  ---
+  
+  ``` json
+  {
+      "id": "org_2123312131125533",
+      "display_name": "Acme Corp",
+      "create_time": "2024-01-05T14:48:00.000Z",
+      "external_id": "my_unique_id",
+      "metadata": {
+        "someKey": "somevalue"
+      },
+      "region_code": "US",
+      "update_time": "…"
+  }
+  
+   ```
+}

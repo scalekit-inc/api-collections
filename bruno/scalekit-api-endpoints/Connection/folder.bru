@@ -1,0 +1,104 @@
+meta {
+  name: Connection
+}
+
+auth {
+  mode: oauth2
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: {{env_url}}/oauth/token
+  refresh_token_url: {{env_url}}/oauth/token
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+  scope: 
+  credentials_placement: body
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: 
+  auto_fetch_token: true
+  auto_refresh_token: false
+}
+
+docs {
+  A connection represents configuration with a Identity Provider within an Organization.
+  
+  See [API Reference](https://docs.scalekit.com) for comprehensive details.
+  
+  ## **Attributes**
+  
+  **`id`** string  
+  Unique ID of the connection
+  
+  ---
+  
+  **`organization_id`** string  
+  Display Name of the Connection
+  
+  ---
+  
+  **`provider`** enum  
+  _Possible Values:_ `OKTA`, `GOOGLE`, `MICROSOFT_AD`, `AUTH0`, `ONELOGIN`, `PING_IDENTITY`, `JUMPCLOUD`, `CUSTOM`
+  
+  ---
+  
+  **`status`** enum  
+  _Possible Values:_ `DRAFT`, `IN_PROGRESS`, `COMPLETED`
+  
+  ---
+  
+  **`enabled`** boolean
+  
+  ---
+  
+  **`saml_config`** object
+  
+  ( Truncated nested object )
+  
+  ---
+  
+  **`oidc_config`** object
+  
+  ( Truncated nested object )
+  
+  ---
+  
+  **`create_time`** string  
+  Timestamp at which this colleection record was last updated in ISO 8601 format
+  
+  ---
+  
+  **`update_time`** string  
+  Timestamp at which this collection record was last updated in ISO 8601 format
+  
+  ---
+  
+  ``` json
+  {
+      "id": "conn_2123312131125533",
+      "organization_id": "org_1232434",
+      "provider": "OKTA",
+      "type": "SAML",
+      "status": "COMPLETED",
+      "enabled": true,
+      "debug_enabled": false,
+      "configuration_type": "MANUAL",
+      "saml_config":{
+          "sp_entity_id": "https://yourapp.com/service/saml",
+          "sp_assertion_url": "https://youridp.com/service/saml/assertion",
+          "sp_metadata_url": "https://youridp.com/service/saml/metadata",
+          "idp_metadata_url": "https://youridp.com/service/idp/metadata",
+          "idp_sso_url": "https://youridp.com/sso/saml",
+      }
+      "attribute_mapping":{
+          "email": "email", 
+          "family_name": "lastName", 
+          "given_name": "firstName", 
+          "sub": "nameid",
+      }
+      "create_time": "2024-01-05T14:48:00.000Z",
+  }
+  
+   ```
+}

@@ -1,0 +1,26 @@
+meta {
+  name: Get Organization by ID
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{env_url}}/api/v1/organizations/{{example_org}}
+  body: none
+  auth: oauth2
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: {{env_url}}/oauth/token
+  refresh_token_url: {{env_url}}/oauth/token
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+  scope: 
+  credentials_placement: body
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: 
+  auto_fetch_token: true
+  auto_refresh_token: false
+}

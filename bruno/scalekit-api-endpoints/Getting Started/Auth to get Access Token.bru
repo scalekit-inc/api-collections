@@ -1,0 +1,47 @@
+meta {
+  name: Auth to get Access Token
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{env_url}}/oauth/token
+  body: formUrlEncoded
+  auth: oauth2
+}
+
+headers {
+  Content-Type: application/x-www-form-urlencoded
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: {{env_url}}/oauth/token
+  refresh_token_url: {{env_url}}/oauth/token
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+  scope: 
+  credentials_placement: body
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: 
+  auto_fetch_token: true
+  auto_refresh_token: false
+}
+
+body:form-urlencoded {
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+  grant_type: client_credentials
+}
+
+tests {
+  // Sets `access_token`, so that you can play with rest of the APIs
+  const responseJson = res.getBody();
+  
+  if (responseJson.access_token) {
+      bru.setEnvVar("access_token", responseJson.access_token);
+  } else {
+      console.log("No access_token found in the response.");
+  }
+}

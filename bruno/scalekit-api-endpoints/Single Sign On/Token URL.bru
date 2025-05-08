@@ -1,0 +1,29 @@
+meta {
+  name: Token URL
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{env_url}}?code=9BmvhId3OBM4JUJW6D25ysb4xpCFt6SduiJNxPXz5FgaRbzBHg&redirect_uri={{redirect_uri}}&client_id={{client_id}}&client_secret={{client_secret}}&grant_type=authorization_code&scope=offline_access
+  body: none
+  auth: bearer
+}
+
+params:query {
+  code: 9BmvhId3OBM4JUJW6D25ysb4xpCFt6SduiJNxPXz5FgaRbzBHg
+  redirect_uri: {{redirect_uri}}
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+  grant_type: authorization_code
+  scope: offline_access
+  ~code_verfier: 
+}
+
+auth:bearer {
+  token: eyJhbGciOiJSUzI1NiIsImtpZCI6InNua181ODMyNzQ4MDk4OTEyMjU2NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NjYWxla2l0LXo0NGlyb3FhYWFkYS1kZXYuc2NhbGVraXQuY2xvdWQiLCJzdWIiOiJza2NfNTgzMjc0ODIwNjI4NjQzOTAiLCJhdWQiOlsic2tjXzU4MzI3NDgyMDYyODY0MzkwIl0sImV4cCI6MTc0MTkyOTI0MCwiaWF0IjoxNzQxODQyODQwLCJuYmYiOjE3NDE4NDI4NDAsImNsaWVudF9pZCI6InNrY181ODMyNzQ4MjA2Mjg2NDM5MCIsImp0aSI6InRrbl82MzM3NzAwODY0MTQ0MjMzNiJ9.rfDOGV_blbzeqtgpcRtWkOzjecolBd8QSI1pUoWcOC2GNgS_grOpfoXvOpHBxLComsEAOiKPGsiX5_BT2I-r68UeigcTZNN17XrayLV4H2NBV9n683IgDv88Kw4iWZI4v5U-mnfelKg6u_GFen18smH2OHf2MYV25ZYlm4eCX0c2RedOzCINxlcEwGKRJxoSN1ZG2IZ-Y3N05EPEcKComLIqfgZ1lXn7faXksc7pWv1V2jlBIveqTxv-EGP-hgpw77h7nKx4upBUJpbeweM-hmRMNflDtAkgRNQuzConEhmZrRGk0VH2Gxbb0IboaawY9yyZ8dYIUvKX6Vnndf1e4Q
+}
+
+docs {
+  This endpoint cannot be used directly in Postman. To make it work, you need to manually retrieve the authorization code from the browser and include it in the request.
+}

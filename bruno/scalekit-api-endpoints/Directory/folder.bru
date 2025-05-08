@@ -1,0 +1,26 @@
+meta {
+  name: Directory
+}
+
+auth {
+  mode: oauth2
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: {{env_url}}/oauth/token
+  refresh_token_url: {{env_url}}/oauth/token
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+  scope: 
+  credentials_placement: body
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: 
+  auto_fetch_token: true
+  auto_refresh_token: false
+}
+
+docs {
+  The Directory object represents a connection to a directory provider. You can programmatically enable or disable directories for an organization using the Directory API. Scalekit synchronizes and stores the users and groups from connected directories. The Directory API allows you to fetch users and groups from the directory on demand.
+}

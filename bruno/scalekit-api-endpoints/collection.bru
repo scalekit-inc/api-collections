@@ -1,0 +1,46 @@
+meta {
+  name: scalekit-api-endpoints
+}
+
+auth {
+  mode: oauth2
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: {{env_url}}/oauth/token
+  refresh_token_url: {{env_url}}/oauth/token
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+  scope: 
+  credentials_placement: body
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: 
+  auto_fetch_token: true
+  auto_refresh_token: false
+}
+
+vars:pre-request {
+  m2m_client_id: m2morg_68315758685323697
+  m2m_secret_id: sks_68320656441213544
+  m2m_client_secret: test_ly8G57h0ErRJSObJI6dShkoaq6bigo11Dxcfa6reKG1kKNVbqBKW4H5Ctmb5UZ0X
+}
+
+docs {
+  Explore APIs from Scalekit on this workspace. It lets you build enterprise grade authentication for you and your customers.
+  
+  [Sign up](https://www.scalekit.com) for an account and grab the credentials to start playing with the APIs. See developer documentation to dive deeper.
+  
+  **In this API Collections:**
+  
+  - **Getting Started** lets you use the credentials and get the `access_token` required to play with rest of the APIs.
+      
+  - **Single Sign On** API collections contains APIs that redirects your users (from browser) to authenticate with their chosen Identity Provider (IdPs) and get your app the user profile details.
+      
+  - With **Organization APIs,** manage your create and manage customer accounts and details.
+      
+  - Let your users configure their own Authentication from your app using **Admin Portal APIs**.
+      
+  - Control the SSO connections in a organization to enable and disable it real-time using **Connection APIs**
+}
