@@ -3185,7 +3185,7 @@
 			"description": "The Directory object represents a connection to a directory provider. You can programmatically enable or disable directories for an organization using the Directory API. Scalekit synchronizes and stores the users and groups from connected directories. The Directory API allows you to fetch users and groups from the directory on demand."
 		},
 		{
-			"name": "Admin Portal (Self Service)",
+			"name": "Admin Portal",
 			"item": [
 				{
 					"name": "Generate Portal Link",
@@ -3958,6 +3958,719 @@
 			"name": "Auth Methods",
 			"item": [
 				{
+					"name": "Send Passwordless Api",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"saifshine7@gmail.com\",\n    \"expiration_seconds\": 300,\n    \"state\": \"jAy-state1-gM4fdZdV22nqm6Q_jAy-XwpYdYFhH8lb2KllJXhHN3BGKaxGwG-gM4fdZdV22nqm6Q\",\n    \"template\": \"SIGNIN\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{env_url}}/api/v1/passwordless/email/send",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"passwordless",
+								"email",
+								"send"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "404",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"saifshine7@gmail.com\",\n    \"expiration_seconds\": 300,\n    \"state\": \"jAy-state1-gM4fdZdV22nqm6Q_jAy-XwpYdYFhH8lb2KllJXhHN3BGKaxGwG-gM4fdZdV22nqm6Q\",\n    \"template\": \"SIGNIN\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{env_url}}/api/v1/passwordless/email/send",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"passwordless",
+										"email",
+										"send"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "grpc-metadata-content-type",
+									"value": "application/grpc"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Status"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Message"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Status-Details-Bin"
+								},
+								{
+									"key": "grpc-metadata-x-trace-id",
+									"value": "f7fe0fcb8ade5d8363bea351a87fba3d"
+								},
+								{
+									"key": "vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Content-Length",
+									"value": "153"
+								},
+								{
+									"key": "date",
+									"value": "Sat, 31 May 2025 12:55:35 GMT"
+								},
+								{
+									"key": "via",
+									"value": "1.1 google"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache, no-store, must-revalidate"
+								},
+								{
+									"key": "permissions-policy",
+									"value": "()"
+								},
+								{
+									"key": "referrer-policy",
+									"value": "strict-origin-when-cross-origin"
+								},
+								{
+									"key": "strict-transport-security",
+									"value": "max-age=31536000; includeSubDomains; preload"
+								},
+								{
+									"key": "x-content-type-options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Alt-Svc",
+									"value": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 3,\n    \"message\": \"INVALID_CONNECTION_TYPE\",\n    \"details\": [\n        {\n            \"@type\": \"type.googleapis.com/scalekit.v1.errdetails.ErrorInfo\",\n            \"error_code\": \"BAD_REQUEST\"\n        }\n    ]\n}"
+						},
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"saifshine7@gmail.com\",\n    \"expiration_seconds\": 300,\n    \"state\": \"jAy-state1-gM4fdZdV22nqm6Q_jAy-XwpYdYFhH8lb2KllJXhHN3BGKaxGwG-gM4fdZdV22nqm6Q\",\n    \"template\": \"SIGNIN\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{env_url}}/api/v1/passwordless/email/send",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"passwordless",
+										"email",
+										"send"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "grpc-metadata-content-type",
+									"value": "application/grpc"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Status"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Message"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Status-Details-Bin"
+								},
+								{
+									"key": "grpc-metadata-x-trace-id",
+									"value": "eafdb4e6c69258962b8b088a24a7b0b0"
+								},
+								{
+									"key": "vary",
+									"value": "Origin"
+								},
+								{
+									"key": "x-trace-id",
+									"value": "eafdb4e6c69258962b8b088a24a7b0b0"
+								},
+								{
+									"key": "Content-Length",
+									"value": "99"
+								},
+								{
+									"key": "date",
+									"value": "Sat, 31 May 2025 12:57:55 GMT"
+								},
+								{
+									"key": "via",
+									"value": "1.1 google"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache, no-store, must-revalidate"
+								},
+								{
+									"key": "permissions-policy",
+									"value": "()"
+								},
+								{
+									"key": "referrer-policy",
+									"value": "strict-origin-when-cross-origin"
+								},
+								{
+									"key": "strict-transport-security",
+									"value": "max-age=31536000; includeSubDomains; preload"
+								},
+								{
+									"key": "x-content-type-options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Alt-Svc",
+									"value": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"auth_request_id\": \"u3HM3VJP1hF14wkXf2IctaZbbzxqQreVC3zBEimrzWZXeZ-sAA\",\n    \"expires_at\": \"1748696575\"\n}"
+						},
+						{
+							"name": "new-200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"saifshine7@gmail.com\",\n    \"expiration_seconds\": 300,\n    \"state\": \"jAy-state1-gM4fdZdV22nqm6Q_jAy-XwpYdYFhH8lb2KllJXhHN3BGKaxGwG-gM4fdZdV22nqm6Q\",\n    \"template\": \"SIGNIN\",\n    \"expires_in\": 50\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{env_url}}/api/v1/passwordless/email/send",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"passwordless",
+										"email",
+										"send"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "grpc-metadata-content-type",
+									"value": "application/grpc"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Status"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Message"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Status-Details-Bin"
+								},
+								{
+									"key": "grpc-metadata-x-trace-id",
+									"value": "b387c90acd260740ea6b4188670bf51b"
+								},
+								{
+									"key": "vary",
+									"value": "Origin"
+								},
+								{
+									"key": "x-trace-id",
+									"value": "b387c90acd260740ea6b4188670bf51b"
+								},
+								{
+									"key": "Content-Length",
+									"value": "140"
+								},
+								{
+									"key": "date",
+									"value": "Sat, 31 May 2025 19:10:28 GMT"
+								},
+								{
+									"key": "via",
+									"value": "1.1 google"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache, no-store, must-revalidate"
+								},
+								{
+									"key": "permissions-policy",
+									"value": "()"
+								},
+								{
+									"key": "referrer-policy",
+									"value": "strict-origin-when-cross-origin"
+								},
+								{
+									"key": "strict-transport-security",
+									"value": "max-age=31536000; includeSubDomains; preload"
+								},
+								{
+									"key": "x-content-type-options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Alt-Svc",
+									"value": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"auth_request_id\": \"yTjFspI4v2bD_FZTBxrHWhqtNhdOh2arwxi4K9QGtATmeWkFxw\",\n    \"expires_at\": \"1748718678\",\n    \"expires_in\": 50,\n    \"passwordless_type\": \"OTP\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Verify Passwordless API",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"code\": \"683438\",\n    \"auth_request_id\": \"WXIYedHng-rbo9G9V6QGtjPesG9FPCbSETh-iH5AiY2Ca2ajVQ\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{env_url}}/api/v1/passwordless/email/verify",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"passwordless",
+								"email",
+								"verify"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"code\": \"683438\",\n    \"auth_request_id\": \"WXIYedHng-rbo9G9V6QGtjPesG9FPCbSETh-iH5AiY2Ca2ajVQ\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{env_url}}/api/v1/passwordless/email/verify",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"passwordless",
+										"email",
+										"verify"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "grpc-metadata-content-type",
+									"value": "application/grpc"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Status"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Message"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Status-Details-Bin"
+								},
+								{
+									"key": "grpc-metadata-x-trace-id",
+									"value": "eafc5cb0b54105ae553205757216541a"
+								},
+								{
+									"key": "vary",
+									"value": "Origin"
+								},
+								{
+									"key": "x-trace-id",
+									"value": "eafc5cb0b54105ae553205757216541a"
+								},
+								{
+									"key": "Content-Length",
+									"value": "166"
+								},
+								{
+									"key": "date",
+									"value": "Sat, 31 May 2025 19:34:08 GMT"
+								},
+								{
+									"key": "via",
+									"value": "1.1 google"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache, no-store, must-revalidate"
+								},
+								{
+									"key": "permissions-policy",
+									"value": "()"
+								},
+								{
+									"key": "referrer-policy",
+									"value": "strict-origin-when-cross-origin"
+								},
+								{
+									"key": "strict-transport-security",
+									"value": "max-age=31536000; includeSubDomains; preload"
+								},
+								{
+									"key": "x-content-type-options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Alt-Svc",
+									"value": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"email\": \"saifshine7@gmail.com\",\n    \"state\": \"jAy-state1-gM4fdZdV22nqm6Q_jAy-XwpYdYFhH8lb2KllJXhHN3BGKaxGwG-gM4fdZdV22nqm6Q\",\n    \"template\": \"SIGNIN\",\n    \"passwordless_type\": \"OTP\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Resend Passwordless API",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"auth_request_id\": \"WXIYedHng-rbo9G9V6QGtjPesG9FPCbSETh-iH5AiY2Ca2ajVQ\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{env_url}}/api/v1/passwordless/email/resend",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"passwordless",
+								"email",
+								"resend"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"auth_request_id\": \"MMXw81GFTH8p0cz-YP1J3QtF-5IOV0gznNoP0z1POS8C46fUVQ\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{env_url}}/api/v1/passwordless/email/resend",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"passwordless",
+										"email",
+										"resend"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "grpc-metadata-content-type",
+									"value": "application/grpc"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Status"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Message"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Status-Details-Bin"
+								},
+								{
+									"key": "grpc-metadata-x-trace-id",
+									"value": "b52a0a6ab041688211bc24c385100dc9"
+								},
+								{
+									"key": "vary",
+									"value": "Origin"
+								},
+								{
+									"key": "x-trace-id",
+									"value": "b52a0a6ab041688211bc24c385100dc9"
+								},
+								{
+									"key": "Content-Length",
+									"value": "99"
+								},
+								{
+									"key": "date",
+									"value": "Sat, 31 May 2025 14:05:09 GMT"
+								},
+								{
+									"key": "via",
+									"value": "1.1 google"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache, no-store, must-revalidate"
+								},
+								{
+									"key": "permissions-policy",
+									"value": "()"
+								},
+								{
+									"key": "referrer-policy",
+									"value": "strict-origin-when-cross-origin"
+								},
+								{
+									"key": "strict-transport-security",
+									"value": "max-age=31536000; includeSubDomains; preload"
+								},
+								{
+									"key": "x-content-type-options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Alt-Svc",
+									"value": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"auth_request_id\": \"MMXw81GFTH8p0cz-YP1J3QtF-5IOV0gznNoP0z1POS8C46fUVQ\",\n    \"expires_at\": \"1748700599\"\n}"
+						},
+						{
+							"name": "new-200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"auth_request_id\": \"WXIYedHng-rbo9G9V6QGtjPesG9FPCbSETh-iH5AiY2Ca2ajVQ\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{env_url}}/api/v1/passwordless/email/resend",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"passwordless",
+										"email",
+										"resend"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "grpc-metadata-content-type",
+									"value": "application/grpc"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Status"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Message"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Status-Details-Bin"
+								},
+								{
+									"key": "grpc-metadata-x-trace-id",
+									"value": "ed1f767d28381d86f3b8220067fb32b6"
+								},
+								{
+									"key": "vary",
+									"value": "Origin"
+								},
+								{
+									"key": "x-trace-id",
+									"value": "ed1f767d28381d86f3b8220067fb32b6"
+								},
+								{
+									"key": "Content-Length",
+									"value": "140"
+								},
+								{
+									"key": "date",
+									"value": "Sat, 31 May 2025 19:33:08 GMT"
+								},
+								{
+									"key": "via",
+									"value": "1.1 google"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache, no-store, must-revalidate"
+								},
+								{
+									"key": "permissions-policy",
+									"value": "()"
+								},
+								{
+									"key": "referrer-policy",
+									"value": "strict-origin-when-cross-origin"
+								},
+								{
+									"key": "strict-transport-security",
+									"value": "max-age=31536000; includeSubDomains; preload"
+								},
+								{
+									"key": "x-content-type-options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Alt-Svc",
+									"value": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"auth_request_id\": \"WXIYedHng-rbo9G9V6QGtjPesG9FPCbSETh-iH5AiY2Ca2ajVQ\",\n    \"expires_at\": \"1748720072\",\n    \"expires_in\": 84,\n    \"passwordless_type\": \"OTP\"\n}"
+						}
+					]
+				},
+				{
 					"name": "Create Passwordless Connection",
 					"request": {
 						"method": "POST",
@@ -4475,6 +5188,144 @@
 				},
 				{
 					"name": "Get a M2M client",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6InNua18yNzc1ODAzMjM1MTkyMDE2NSIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2dtYWlsNjI5ZGM4ODAwMDAwMjUtZGV2LnNjYWxla2l0LmNsb3VkIiwic3ViIjoic2tjXzI3NzU4MDMyMzY4Njk3MzgxIiwiYXVkIjpbInNrY18yNzc1ODAzMjM2ODY5NzM4MSJdLCJleHAiOjE3NDQ3MzAzMTYsImlhdCI6MTc0NDcwMTUxNiwibmJmIjoxNzQ0NzAxNTE2LCJjbGllbnRfaWQiOiJza2NfMjc3NTgwMzIzNjg2OTczODEiLCJqdGkiOiJ0a25fNjgxNzMwNzA3MjgxNjc4NDcifQ.Kd2bfm83AZTepVKIjQ5tsWk4xOveUnFlj4JuFpnof0GiSLTmI1CSHXBAV6ZtPWT5iaVagcj0SKcTLf2G6vN5R0sPQu20THRpBxxNgblFYdONB9ftE8dZgGW5uO3GMIGx-5PgtNSu-QlAOa4ax9LuYlMphTiKdrV4uVFMlH26Kcsk8De_KAed6Y3yCNsNZ9PkNS6LCeATF-5p62SHZDQxvjVamkiJ5UIrC4fkUG6t0SncAmvOUHmI3sS5E02o44euwr5PsOVT70t6FFBouAY1JG22leUqRN8O47My0iad7MoeV45_anRPEVM2nu6Ur1l2FYsN6mZM5ENi_mENRpB9aw"
+							}
+						],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/clients/{{m2m_client_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"clients",
+								"{{m2m_client_id}}"
+							]
+						},
+						"description": "Generated from cURL: curl --location 'https://gmail629dc880000025-dev.scalekit.cloud/api/v1/organizations/org_67586567912292943/clients/m2morg_68187831473799595' \\\n--header 'Content-Type: application/json' \\\n--header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6InNua18yNzc1ODAzMjM1MTkyMDE2NSIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2dtYWlsNjI5ZGM4ODAwMDAwMjUtZGV2LnNjYWxla2l0LmNsb3VkIiwic3ViIjoic2tjXzI3NzU4MDMyMzY4Njk3MzgxIiwiYXVkIjpbInNrY18yNzc1ODAzMjM2ODY5NzM4MSJdLCJleHAiOjE3NDQ3MzAzMTYsImlhdCI6MTc0NDcwMTUxNiwibmJmIjoxNzQ0NzAxNTE2LCJjbGllbnRfaWQiOiJza2NfMjc3NTgwMzIzNjg2OTczODEiLCJqdGkiOiJ0a25fNjgxNzMwNzA3MjgxNjc4NDcifQ.Kd2bfm83AZTepVKIjQ5tsWk4xOveUnFlj4JuFpnof0GiSLTmI1CSHXBAV6ZtPWT5iaVagcj0SKcTLf2G6vN5R0sPQu20THRpBxxNgblFYdONB9ftE8dZgGW5uO3GMIGx-5PgtNSu-QlAOa4ax9LuYlMphTiKdrV4uVFMlH26Kcsk8De_KAed6Y3yCNsNZ9PkNS6LCeATF-5p62SHZDQxvjVamkiJ5UIrC4fkUG6t0SncAmvOUHmI3sS5E02o44euwr5PsOVT70t6FFBouAY1JG22leUqRN8O47My0iad7MoeV45_anRPEVM2nu6Ur1l2FYsN6mZM5ENi_mENRpB9aw'"
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6InNua18yNzc1ODAzMjM1MTkyMDE2NSIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2dtYWlsNjI5ZGM4ODAwMDAwMjUtZGV2LnNjYWxla2l0LmNsb3VkIiwic3ViIjoic2tjXzI3NzU4MDMyMzY4Njk3MzgxIiwiYXVkIjpbInNrY18yNzc1ODAzMjM2ODY5NzM4MSJdLCJleHAiOjE3NDQ3MzAzMTYsImlhdCI6MTc0NDcwMTUxNiwibmJmIjoxNzQ0NzAxNTE2LCJjbGllbnRfaWQiOiJza2NfMjc3NTgwMzIzNjg2OTczODEiLCJqdGkiOiJ0a25fNjgxNzMwNzA3MjgxNjc4NDcifQ.Kd2bfm83AZTepVKIjQ5tsWk4xOveUnFlj4JuFpnof0GiSLTmI1CSHXBAV6ZtPWT5iaVagcj0SKcTLf2G6vN5R0sPQu20THRpBxxNgblFYdONB9ftE8dZgGW5uO3GMIGx-5PgtNSu-QlAOa4ax9LuYlMphTiKdrV4uVFMlH26Kcsk8De_KAed6Y3yCNsNZ9PkNS6LCeATF-5p62SHZDQxvjVamkiJ5UIrC4fkUG6t0SncAmvOUHmI3sS5E02o44euwr5PsOVT70t6FFBouAY1JG22leUqRN8O47My0iad7MoeV45_anRPEVM2nu6Ur1l2FYsN6mZM5ENi_mENRpB9aw"
+									}
+								],
+								"url": {
+									"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/clients/{{m2m_client_id}}",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"organizations",
+										"{{organization_id}}",
+										"clients",
+										"{{m2m_client_id}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "grpc-metadata-content-type",
+									"value": "application/grpc"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Status"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Message"
+								},
+								{
+									"key": "grpc-metadata-trailer",
+									"value": "Grpc-Status-Details-Bin"
+								},
+								{
+									"key": "grpc-metadata-x-trace-id",
+									"value": "889def0c96dd0ac993873811b5a67557"
+								},
+								{
+									"key": "vary",
+									"value": "Origin"
+								},
+								{
+									"key": "x-trace-id",
+									"value": "889def0c96dd0ac993873811b5a67557"
+								},
+								{
+									"key": "Content-Length",
+									"value": "801"
+								},
+								{
+									"key": "date",
+									"value": "Wed, 16 Apr 2025 07:59:37 GMT"
+								},
+								{
+									"key": "via",
+									"value": "1.1 google"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache, no-store, must-revalidate"
+								},
+								{
+									"key": "permissions-policy",
+									"value": "()"
+								},
+								{
+									"key": "referrer-policy",
+									"value": "strict-origin-when-cross-origin"
+								},
+								{
+									"key": "strict-transport-security",
+									"value": "max-age=31536000; includeSubDomains; preload"
+								},
+								{
+									"key": "x-content-type-options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Alt-Svc",
+									"value": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"client\": {\n        \"client_id\": \"m2morg_68315758685323697\",\n        \"secrets\": [\n            {\n                \"id\": \"sks_68315758802764209\",\n                \"create_time\": \"2025-04-16T06:56:05.360Z\",\n                \"update_time\": \"2025-04-16T06:56:05.367190Z\",\n                \"secret_suffix\": \"UZ0X\",\n                \"status\": \"ACTIVE\",\n                \"last_used_time\": \"2025-04-16T06:56:05.360Z\"\n            },\n            {\n                \"id\": \"sks_68317787721826737\",\n                \"create_time\": \"2025-04-16T07:16:14.690Z\",\n                \"update_time\": \"2025-04-16T07:16:14.699725Z\",\n                \"secret_suffix\": \"Wpe5\",\n                \"status\": \"ACTIVE\",\n                \"last_used_time\": \"2025-04-16T07:16:14.690Z\"\n            }\n        ],\n        \"name\": \"Service Account 1\",\n        \"description\": \"This service account does xyz things\",\n        \"organization_id\": \"org_59615193906282635\",\n        \"create_time\": \"2025-04-16T06:56:05.290Z\",\n        \"update_time\": \"2025-04-16T07:53:38.847754Z\",\n        \"scopes\": [\n            \"scope1\",\n            \"scope2\"\n        ],\n        \"audience\": [\n            \"my-own-api\"\n        ],\n        \"custom_claims\": [\n            {\n                \"key\": \"key_2\",\n                \"value\": \"value_2\"\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Rotate secret",
 					"request": {
 						"method": "GET",
 						"header": [
