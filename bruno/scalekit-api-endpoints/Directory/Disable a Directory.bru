@@ -1,0 +1,15 @@
+meta {
+  name: Disable a Directory
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{env_url}}/api/v1/organizations/{{organization_id}}/directories/{{directory_id}}:disable
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}

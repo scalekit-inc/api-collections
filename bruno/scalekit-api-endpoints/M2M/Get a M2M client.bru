@@ -1,0 +1,37 @@
+meta {
+  name: Get a M2M client
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{env_url}}/api/v1/organizations/{{organization_id}}/clients/{{m2m_client_id}}
+  body: none
+  auth: oauth2
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6InNua18yNzc1ODAzMjM1MTkyMDE2NSIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2dtYWlsNjI5ZGM4ODAwMDAwMjUtZGV2LnNjYWxla2l0LmNsb3VkIiwic3ViIjoic2tjXzI3NzU4MDMyMzY4Njk3MzgxIiwiYXVkIjpbInNrY18yNzc1ODAzMjM2ODY5NzM4MSJdLCJleHAiOjE3NDQ3MzAzMTYsImlhdCI6MTc0NDcwMTUxNiwibmJmIjoxNzQ0NzAxNTE2LCJjbGllbnRfaWQiOiJza2NfMjc3NTgwMzIzNjg2OTczODEiLCJqdGkiOiJ0a25fNjgxNzMwNzA3MjgxNjc4NDcifQ.Kd2bfm83AZTepVKIjQ5tsWk4xOveUnFlj4JuFpnof0GiSLTmI1CSHXBAV6ZtPWT5iaVagcj0SKcTLf2G6vN5R0sPQu20THRpBxxNgblFYdONB9ftE8dZgGW5uO3GMIGx-5PgtNSu-QlAOa4ax9LuYlMphTiKdrV4uVFMlH26Kcsk8De_KAed6Y3yCNsNZ9PkNS6LCeATF-5p62SHZDQxvjVamkiJ5UIrC4fkUG6t0SncAmvOUHmI3sS5E02o44euwr5PsOVT70t6FFBouAY1JG22leUqRN8O47My0iad7MoeV45_anRPEVM2nu6Ur1l2FYsN6mZM5ENi_mENRpB9aw
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: {{env_url}}/oauth/token
+  refresh_token_url: {{env_url}}/oauth/token
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+  scope: 
+  credentials_placement: body
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: 
+  auto_fetch_token: true
+  auto_refresh_token: false
+}
+
+docs {
+  Generated from cURL: curl --location 'https://gmail629dc880000025-dev.scalekit.cloud/api/v1/organizations/org_67586567912292943/clients/m2morg_68187831473799595' \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6InNua18yNzc1ODAzMjM1MTkyMDE2NSIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2dtYWlsNjI5ZGM4ODAwMDAwMjUtZGV2LnNjYWxla2l0LmNsb3VkIiwic3ViIjoic2tjXzI3NzU4MDMyMzY4Njk3MzgxIiwiYXVkIjpbInNrY18yNzc1ODAzMjM2ODY5NzM4MSJdLCJleHAiOjE3NDQ3MzAzMTYsImlhdCI6MTc0NDcwMTUxNiwibmJmIjoxNzQ0NzAxNTE2LCJjbGllbnRfaWQiOiJza2NfMjc3NTgwMzIzNjg2OTczODEiLCJqdGkiOiJ0a25fNjgxNzMwNzA3MjgxNjc4NDcifQ.Kd2bfm83AZTepVKIjQ5tsWk4xOveUnFlj4JuFpnof0GiSLTmI1CSHXBAV6ZtPWT5iaVagcj0SKcTLf2G6vN5R0sPQu20THRpBxxNgblFYdONB9ftE8dZgGW5uO3GMIGx-5PgtNSu-QlAOa4ax9LuYlMphTiKdrV4uVFMlH26Kcsk8De_KAed6Y3yCNsNZ9PkNS6LCeATF-5p62SHZDQxvjVamkiJ5UIrC4fkUG6t0SncAmvOUHmI3sS5E02o44euwr5PsOVT70t6FFBouAY1JG22leUqRN8O47My0iad7MoeV45_anRPEVM2nu6Ur1l2FYsN6mZM5ENi_mENRpB9aw'
+}

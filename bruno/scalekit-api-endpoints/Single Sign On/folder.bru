@@ -1,0 +1,38 @@
+meta {
+  name: Single Sign On
+}
+
+auth {
+  mode: oauth2
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: {{env_url}}/oauth/token
+  refresh_token_url: {{env_url}}/oauth/token
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+  scope: 
+  credentials_placement: body
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: 
+  auto_fetch_token: true
+  auto_refresh_token: false
+}
+
+docs {
+  To initiate an Enterprise Single Sign-On (SSO) login for one of your customers, you need to redirect them to the Scalekit Authorization URL. This URL must be accompanied by the necessary details about the organization or the SSO connection.
+  
+  This folder captures two APIs that facilitate the SSO mechanism for your app to implement for your customers.
+  
+  <img src="https://content.pstmn.io/17b5ef4f-7a6e-44fc-a62f-90735421e71d/aW1hZ2UucG5n" width="4936" height="3744">
+  
+  **Authorization URL**
+  
+  The users try to intiate an SSO from their browser (Step 2) and lets Scalekit faciliate the authenticate with user-desired Identity provider.
+  
+  **Token URL**
+  
+  Scalekit sends an `code` that your app needs to exchange for user profile details.
+}

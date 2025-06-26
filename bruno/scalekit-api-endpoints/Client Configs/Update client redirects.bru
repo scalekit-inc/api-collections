@@ -1,0 +1,41 @@
+meta {
+  name: Update client redirects
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{env_url}}/api/v1/clients/{{client_id}}
+  body: json
+  auth: oauth2
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: {{env_url}}/oauth/token
+  refresh_token_url: {{env_url}}/oauth/token
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+  scope: 
+  credentials_placement: body
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: 
+  auto_fetch_token: true
+  auto_refresh_token: false
+}
+
+body:json {
+  {
+      "redirect_uris": [
+          "http://localhost:3000/api/callback",
+          "http://localhost:8888/api/auth/scalekit/callback"
+      ],
+      "back_channel_logout_uri": "http://yoursaas.com/bc-logout",
+      "post_logout_redirect_uris": [
+          "http://localhost:3000/",
+          "http://localhost:8888/login"
+      ],
+      "initiate_login_uri": "http://yoursaas.com/login"
+  }
+}
