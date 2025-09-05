@@ -72,11 +72,11 @@ The `bruno` directory will contain collections for [Bruno](https://www.usebruno.
 
 ## Additional Resources
 
-- 📚 [Scalekit API Documentation](https://docs.scalekit.com/apis)
-- 🔧 [OpenAPI Specification](/spec/)
-- 💬 [Community Support](https://github.com/scalekit-inc/scalekit-sdk-node-js/discussions)  
-- 🎯 [Get Started Guide](https://docs.scalekit.com/quick-start-guide)
-- ⚡ [Authentication Guide](https://docs.scalekit.com/best-practices/authentication)
+  - 📚 [Scalekit Documentation](https://docs.scalekit.com)
+  - 🔧 [API Reference](https://docs.scalekit.com/apis/)
+  - 🚀 [Full Stack Auth Quickstart](https://docs.scalekit.com/fsa/quickstart/)
+  - 💬 [Community Examples](https://github.com/orgs/scalekit-developers/repositories)
+  - 📋 [OpenAPI Specification](/spec/)
 
 ---
 
