@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "d3fa4f3c-5b67-470a-aa03-906ec34d6e25",
 		"name": "scalekit-api-endpoints",
-		"description": "Explore APIs from Scalekit on this workspace. It lets you build enterprise grade authentication for you and your customers.\n\n[Sign up](https://www.scalekit.com) for an account and grab the credentials to start playing with the APIs. See developer documentation to dive deeper.\n\n**In this API Collections:**\n\n- **Getting Started** lets you use the credentials and get the `access_token` required to play with rest of the APIs.\n    \n- **Single Sign On** API collections contains APIs that redirects your users (from browser) to authenticate with their chosen Identity Provider (IdPs) and get your app the user profile details.\n    \n- With **Organization APIs,** manage your create and manage customer accounts and details.\n    \n- Let your users configure their own Authentication from your app using **Admin Portal APIs**.\n    \n- Control the SSO connections in a organization to enable and disable it real-time using **Connection APIs**",
+		"description": "Explore APIs from Scalekit on this workspace. It lets you build enterprise grade authentication for you and your customers.\n\n[Sign up](https://www.scalekit.com) for an account and grab the credentials to start playing with the APIs. See developer documentation to dive deeper.\n\n**In this API Collection:**\n\n- **Getting Started** lets you use the credentials and get the `access_token` required to play with rest of the APIs.\n\n- **Single Sign On** API collections contains APIs that redirects your users (from browser) to authenticate with their chosen Identity Provider (IdPs) and get your app the user profile details.\n\n- With **Organization APIs,** manage your create and manage customer accounts and details.\n\n- **Domains** lets you manage verified domains associated with organizations for SSO routing.\n\n- Let your users configure their own Authentication from your app using **Admin Portal APIs**.\n\n- Control the SSO connections in a organization to enable and disable it real-time using **Connection APIs**.\n\n- **Directory** APIs let you manage SCIM directory sync connections and access synced users and groups.\n\n- **Users** APIs let you create, read, update, and delete users within organizations.\n\n- **User Attributes** APIs let you customize attribute mappings for directory sync, SSO, and user profiles.\n\n- **Roles** APIs let you manage roles for role-based access control.\n\n- **Auth Methods** contains passwordless authentication APIs (OTP, magic links).\n\n- **Email** APIs let you configure custom SMTP servers and email templates.\n\n- **Webhooks** APIs let you configure and test webhook integrations.\n\n- **M2M** (Machine-to-Machine) APIs support OAuth2 client credentials for service-to-service authentication.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "36340097",
 		"_collection_link": "https://scalekit.postman.co/workspace/Scalekit~8b9d9569-f604-4717-9944-fa26706e96f3/collection/36340097-d3fa4f3c-5b67-470a-aa03-906ec34d6e25?action=share&source=collection_link&creator=36340097"
@@ -167,6 +167,34 @@
 		{
 			"name": "Client Configs",
 			"item": [
+				{
+					"name": "List Clients",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/clients",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clients"
+							],
+							"query": [
+								{
+									"key": "include_plain_secret",
+									"value": "false",
+									"description": "Include plain text secrets in the response",
+									"disabled": true
+								}
+							]
+						},
+						"description": "List all API clients in the current environment."
+					},
+					"response": []
+				},
 				{
 					"name": "Get Client by ID",
 					"request": {
@@ -515,6 +543,89 @@
 							"body": "{\n    \"client\": {\n        \"id\": \"skc_58327482062864390\",\n        \"keyId\": \"skc_58327482062864390\",\n        \"create_time\": \"2025-02-06T09:11:28.490Z\",\n        \"update_time\": \"2025-03-19T21:38:57.572441851Z\",\n        \"redirect_uris\": [\n            \"http://localhost:3000/api/callback\",\n            \"http://localhost:8888/api/auth/scalekit/callback\"\n        ],\n        \"default_redirect_uri\": \"http://localhost:3000/api/callback\",\n        \"secrets\": [],\n        \"post_logout_redirect_uris\": [\n            \"http://localhost:3000/\",\n            \"http://localhost:8888/login\"\n        ],\n        \"back_channel_logout_uri\": \"http://yoursaas.com/bc-logout\",\n        \"initiate_login_uri\": \"http://yoursaas.com/login\"\n    }\n}"
 						}
 					]
+				},
+				{
+					"name": "Create Client Secret",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/clients/{{client_id}}/secrets",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clients",
+								"{{client_id}}",
+								"secrets"
+							]
+						},
+						"description": "Create a new client secret for the specified client."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Client Secret",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{env_url}}/api/v1/clients/{{client_id}}/secrets/{{secret_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clients",
+								"{{client_id}}",
+								"secrets",
+								"{{secret_id}}"
+							]
+						},
+						"description": "Update a client secret's status (e.g., to deactivate it).",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"INACTIVE\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Client Secret",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/clients/{{client_id}}/secrets/{{secret_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clients",
+								"{{client_id}}",
+								"secrets",
+								"{{secret_id}}"
+							]
+						},
+						"description": "Permanently delete a client secret."
+					},
+					"response": []
 				}
 			],
 			"description": "- ~~Create the Client ID and Client Secret programatically~~\n    \n- ~~Rotate Client secrts programatically~~\n    \n- Update the redirect endpoints that scalekit will remember about this client\n    \n- List the clients"
@@ -2029,6 +2140,29 @@
 					]
 				},
 				{
+					"name": "Delete Portal Link",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{example_org}}/portal_links/{{link_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{example_org}}",
+								"portal_links",
+								"{{link_id}}"
+							]
+						},
+						"description": "Delete (revoke) a previously generated admin portal link."
+					},
+					"response": []
+				},
+				{
 					"name": "Update Organization Settings Copy",
 					"request": {
 						"method": "PATCH",
@@ -2392,7 +2526,7 @@
 					]
 				}
 			],
-			"description": "Organization represents a customer or a tenant of your application. Use this to create enterprise Single Sign-on connections or Admin Portal links for your customers.\n\n## **Attributes**\n\n**`id`** string  \nUnique ID of the organization\n\n---\n\n**`display_name`** string  \nDisplay Name of the Organization\n\n---\n\n**`external_id`** string  \nUnique ID of this organization according to your system. You can store your unique ID for this organization in Scalekit's system and later use this to fetch Organization and Connection details. This is helpful if you don't want to persist Scalekit's Unique Identifiers in your database\n\n---\n\n**`metadata`** map  \nSet of key-value pairs that you can attach to the Organization object. This can be useful for storing additional information about the Organization in a structured format.\n\n---\n\n**`region_code`** enum\n\nRegion in which this organization data is stored in. By default, the environment's `region_code` is used to store this organization's data\n\n_Possible values:_ `US` , `EU`\n\n---\n\n**`create_time`** string  \nTimestamp at which this organization record was created in ISO 8601 format\n\n---\n\n**`update_time`** string  \nTimestamp at which this organization record was last updated in ISO 8601 format\n\n---\n\n``` json\n{\n    \"id\": \"org_2123312131125533\",\n    \"display_name\": \"Acme Corp\",\n    \"create_time\": \"2024-01-05T14:48:00.000Z\",\n    \"external_id\": \"my_unique_id\",\n    \"metadata\": {\n      \"someKey\": \"somevalue\"\n    },\n    \"region_code\": \"US\",\n    \"update_time\": \"…\"\n}\n\n ```",
+			"description": "Organization represents a customer or a tenant of your application. Use this to create enterprise Single Sign-on connections or Admin Portal links for your customers.\n\n## **Attributes**\n\n**`id`** string  \nUnique ID of the organization\n\n---\n\n**`display_name`** string  \nDisplay Name of the Organization\n\n---\n\n**`external_id`** string  \nUnique ID of this organization according to your system. You can store your unique ID for this organization in Scalekit's system and later use this to fetch Organization and Connection details. This is helpful if you don't want to persist Scalekit's Unique Identifiers in your database\n\n---\n\n**`metadata`** map  \nSet of key-value pairs that you can attach to the Organization object. This can be useful for storing additional information about the Organization in a structured format.\n\n---\n\n**`region_code`** enum\n\nRegion in which this organization data is stored in. By default, the environment's\u00a0`region_code`\u00a0is used to store this organization's data\n\n_Possible values:_ `US` , `EU`\n\n---\n\n**`create_time`** string  \nTimestamp at which this organization record was created in ISO 8601 format\n\n---\n\n**`update_time`** string  \nTimestamp at which this organization record was last updated in ISO 8601 format\n\n---\n\n``` json\n{\n    \"id\": \"org_2123312131125533\",\n    \"display_name\": \"Acme Corp\",\n    \"create_time\": \"2024-01-05T14:48:00.000Z\",\n    \"external_id\": \"my_unique_id\",\n    \"metadata\": {\n      \"someKey\": \"somevalue\"\n    },\n    \"region_code\": \"US\",\n    \"update_time\": \"\u2026\"\n}\n\n ```",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -2415,6 +2549,155 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "Domains",
+			"item": [
+				{
+					"name": "List Organization Domains",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/domains",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"domains"
+							]
+						},
+						"description": "List all verified and pending domains for an organization."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Organization Domain",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/domains",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"domains"
+							]
+						},
+						"description": "Add a new domain to an organization. The domain will need to be verified before it becomes active.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"domain\": \"example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Domain",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/domains/{{domain_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"domains",
+								"{{domain_id}}"
+							]
+						},
+						"description": "Retrieve details of a specific domain including its verification status."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Domain",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/domains/{{domain_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"domains",
+								"{{domain_id}}"
+							]
+						},
+						"description": "Update a domain's configuration.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"domain\": \"updated.example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Domain",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/domains/{{domain_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"domains",
+								"{{domain_id}}"
+							]
+						},
+						"description": "Remove a domain from the organization."
+					},
+					"response": []
+				}
+			],
+			"description": "Manage domains associated with organizations. Domains are used to identify and route users to the correct organization during SSO authentication."
 		},
 		{
 			"name": "Directory",
@@ -3180,9 +3463,157 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update Directory",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/directories/{{directory_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"directories",
+								"{{directory_id}}"
+							]
+						},
+						"description": "Update directory configuration such as name or provider settings.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Directory Name\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Directory",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/directories/{{directory_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"directories",
+								"{{directory_id}}"
+							]
+						},
+						"description": "Permanently delete a directory from an organization."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Directory Secret",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/directories/{{directory_id}}/secrets",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"directories",
+								"{{directory_id}}",
+								"secrets"
+							]
+						},
+						"description": "Create a new SCIM bearer token secret for the directory. Used by identity providers to authenticate SCIM requests."
+					},
+					"response": []
+				},
+				{
+					"name": "Regenerate Directory Secret",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/directories/{{directory_id}}/secrets:regenerate",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"directories",
+								"{{directory_id}}",
+								"secrets:regenerate"
+							]
+						},
+						"description": "Regenerate the SCIM bearer token for the directory. This invalidates the previous token."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Directory Attributes",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/directories/{{directory_id}}/attributes",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"directories",
+								"{{directory_id}}",
+								"attributes"
+							]
+						},
+						"description": "Update the attribute mappings for a directory.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"attributes\": [\n        {\n            \"key\": \"email\",\n            \"map_to\": \"email\"\n        },\n        {\n            \"key\": \"name\",\n            \"map_to\": \"displayName\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": []
 				}
 			],
-			"description": "The Directory object represents a connection to a directory provider. You can programmatically enable or disable directories for an organization using the Directory API. Scalekit synchronizes and stores the users and groups from connected directories. The Directory API allows you to fetch users and groups from the directory on demand."
+			"description": "The Directory object represents a connection to a\u00a0directory provider. You can programmatically enable or disable directories for an organization using the Directory API. Scalekit synchronizes and stores the users and groups from connected directories. The Directory API allows you to fetch users and groups from the directory on demand."
 		},
 		{
 			"name": "Admin Portal",
@@ -3500,6 +3931,66 @@
 					]
 				},
 				{
+					"name": "Create Connection",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/connections",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"connections"
+							]
+						},
+						"description": "Create a new SSO connection for an organization. Specify the identity provider and connection type.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"provider\": \"OKTA\",\n    \"type\": \"SAML\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Organization Connection",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/connections/{{connection_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"connections",
+								"{{connection_id}}"
+							]
+						},
+						"description": "Retrieve detailed information about a specific connection within an organization."
+					},
+					"response": []
+				},
+				{
 					"name": "Get Connection",
 					"request": {
 						"method": "GET",
@@ -3550,7 +4041,7 @@
 					"response": []
 				},
 				{
-					"name": "Enable a Connection",
+					"name": "Disable a Connection",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -3689,6 +4180,90 @@
 							"body": "{\n    \"providers\": [\n        {\n            \"key_id\": \"GOOGLE\",\n            \"display_name\": \"Google\"\n        },\n        {\n            \"key_id\": \"GITLAB\",\n            \"display_name\": \"Gitlab\"\n        },\n        {\n            \"key_id\": \"MICROSOFT\",\n            \"display_name\": \"Microsoft\"\n        },\n        {\n            \"key_id\": \"LINKEDIN\",\n            \"display_name\": \"LinkedIn\"\n        },\n        {\n            \"key_id\": \"SALESFORCE\",\n            \"display_name\": \"Salesforce\"\n        },\n        {\n            \"key_id\": \"GITHUB\",\n            \"display_name\": \"Github\"\n        }\n    ]\n}"
 						}
 					]
+				},
+				{
+					"name": "Update Connection",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/connections/{{connection_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"connections",
+								"{{connection_id}}"
+							]
+						},
+						"description": "Update an existing connection's configuration.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ui_button_title\": \"Sign in with Okta\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Connection",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/connections/{{connection_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"connections",
+								"{{connection_id}}"
+							]
+						},
+						"description": "Permanently delete a connection from an organization."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Connection Test Result",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/connections/{{connection_id}}/test-requests/{{test_request_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"connections",
+								"{{connection_id}}",
+								"test-requests",
+								"{{test_request_id}}"
+							]
+						},
+						"description": "Retrieve the result of a connection test request."
+					},
+					"response": []
 				}
 			],
 			"description": "A connection represents configuration with a Identity Provider within an Organization.\n\nSee [API Reference](https://docs.scalekit.com) for comprehensive details.\n\n## **Attributes**\n\n**`id`** string  \nUnique ID of the connection\n\n---\n\n**`organization_id`** string  \nDisplay Name of the Connection\n\n---\n\n**`provider`** enum  \n_Possible Values:_ `OKTA`, `GOOGLE`, `MICROSOFT_AD`, `AUTH0`, `ONELOGIN`, `PING_IDENTITY`, `JUMPCLOUD`, `CUSTOM`\n\n---\n\n**`status`** enum  \n_Possible Values:_ `DRAFT`, `IN_PROGRESS`, `COMPLETED`\n\n---\n\n**`enabled`** boolean\n\n---\n\n**`saml_config`** object\n\n( Truncated nested object )\n\n---\n\n**`oidc_config`** object\n\n( Truncated nested object )\n\n---\n\n**`create_time`** string  \nTimestamp at which this colleection record was last updated in ISO 8601 format\n\n---\n\n**`update_time`** string  \nTimestamp at which this collection record was last updated in ISO 8601 format\n\n---\n\n``` json\n{\n    \"id\": \"conn_2123312131125533\",\n    \"organization_id\": \"org_1232434\",\n    \"provider\": \"OKTA\",\n    \"type\": \"SAML\",\n    \"status\": \"COMPLETED\",\n    \"enabled\": true,\n    \"debug_enabled\": false,\n    \"configuration_type\": \"MANUAL\",\n    \"saml_config\":{\n        \"sp_entity_id\": \"https://yourapp.com/service/saml\",\n        \"sp_assertion_url\": \"https://youridp.com/service/saml/assertion\",\n        \"sp_metadata_url\": \"https://youridp.com/service/saml/metadata\",\n        \"idp_metadata_url\": \"https://youridp.com/service/idp/metadata\",\n        \"idp_sso_url\": \"https://youridp.com/sso/saml\",\n    }\n    \"attribute_mapping\":{\n        \"email\": \"email\", \n        \"family_name\": \"lastName\", \n        \"given_name\": \"firstName\", \n        \"sub\": \"nameid\",\n    }\n    \"create_time\": \"2024-01-05T14:48:00.000Z\",\n}\n\n ```",
@@ -3836,6 +4411,29 @@
 					]
 				},
 				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/users/{{user_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"users",
+								"{{user_id}}"
+							]
+						},
+						"description": "Retrieve detailed information about a specific user within an organization."
+					},
+					"response": []
+				},
+				{
 					"name": "Create a user",
 					"request": {
 						"method": "POST",
@@ -3951,8 +4549,578 @@
 							"body": "{\n    \"next_page_token\": \">:WyJ1c3JfNjM5OTU1MDI1NTQ3NzYzNzQiXQ==\",\n    \"total_size\": 15,\n    \"users\": [\n        {\n            \"id\": \"usr_64543005708648976\",\n            \"environment_id\": \"env_58327480066375686\",\n            \"create_time\": \"2025-03-21T06:17:09.280Z\",\n            \"update_time\": \"2025-03-21T06:17:09.283727Z\",\n            \"email\": \"test8@test.com\",\n            \"external_id\": \"\",\n            \"identity\": \"\",\n            \"phone_number\": \"\",\n            \"organizations\": [\n                {\n                    \"id\": \"org_59615193906282635\",\n                    \"membership_status\": \"INACTIVE\",\n                    \"role\": \"ADMIN\",\n                    \"name\": \"Megasoft\",\n                    \"primary_identity_provider\": \"SCALEKIT\"\n                }\n            ],\n            \"user_profile\": {\n                \"id\": \"usp_64543005708714512\",\n                \"first_name\": \"\",\n                \"last_name\": \"\",\n                \"name\": \"\",\n                \"locale\": \"\",\n                \"email_verified\": false,\n                \"metadata\": {},\n                \"custom_attributes\": {}\n            },\n            \"metadata\": {}\n        },\n        {\n            \"id\": \"usr_64542216458076488\",\n            \"environment_id\": \"env_58327480066375686\",\n            \"create_time\": \"2025-03-21T06:09:18.850Z\",\n            \"update_time\": \"2025-03-21T06:09:18.859732Z\",\n            \"email\": \"test5@test.com\",\n            \"external_id\": \"\",\n            \"identity\": \"\",\n            \"phone_number\": \"\",\n            \"organizations\": [\n                {\n                    \"id\": \"org_59615193906282635\",\n                    \"membership_status\": \"INACTIVE\",\n                    \"role\": \"ADMIN\",\n                    \"name\": \"Megasoft\",\n                    \"primary_identity_provider\": \"SCALEKIT\"\n                }\n            ],\n            \"user_profile\": {\n                \"id\": \"usp_64542216474853704\",\n                \"first_name\": \"\",\n                \"last_name\": \"\",\n                \"name\": \"\",\n                \"locale\": \"\",\n                \"email_verified\": false,\n                \"metadata\": {},\n                \"custom_attributes\": {}\n            },\n            \"metadata\": {}\n        },\n        {\n            \"id\": \"usr_64539547672772936\",\n            \"environment_id\": \"env_58327480066375686\",\n            \"create_time\": \"2025-03-21T05:42:48.130Z\",\n            \"update_time\": \"2025-03-21T05:42:48.133025Z\",\n            \"email\": \"john@example.com\",\n            \"external_id\": \"\",\n            \"identity\": \"\",\n            \"phone_number\": \"\",\n            \"organizations\": [\n                {\n                    \"id\": \"org_59615193906282635\",\n                    \"membership_status\": \"INACTIVE\",\n                    \"role\": \"ADMIN\",\n                    \"name\": \"Megasoft\",\n                    \"primary_identity_provider\": \"SCALEKIT\"\n                }\n            ],\n            \"user_profile\": {\n                \"id\": \"usp_64539547672838472\",\n                \"first_name\": \"\",\n                \"last_name\": \"\",\n                \"name\": \"\",\n                \"locale\": \"\",\n                \"email_verified\": false,\n                \"metadata\": {},\n                \"custom_attributes\": {}\n            },\n            \"metadata\": {}\n        },\n        {\n            \"id\": \"usr_64260071483245059\",\n            \"environment_id\": \"env_58327480066375686\",\n            \"create_time\": \"2025-03-19T07:26:27.340Z\",\n            \"update_time\": \"2025-03-19T07:26:27.343223Z\",\n            \"email\": \"test3@test.com\",\n            \"external_id\": \"\",\n            \"identity\": \"\",\n            \"phone_number\": \"\",\n            \"organizations\": [\n                {\n                    \"id\": \"org_59615193906282635\",\n                    \"membership_status\": \"INACTIVE\",\n                    \"role\": \"ADMIN\",\n                    \"name\": \"Megasoft\",\n                    \"primary_identity_provider\": \"SCALEKIT\"\n                }\n            ],\n            \"user_profile\": {\n                \"id\": \"usp_64260071500022275\",\n                \"first_name\": \"\",\n                \"last_name\": \"\",\n                \"name\": \"\",\n                \"locale\": \"\",\n                \"email_verified\": false,\n                \"metadata\": {},\n                \"custom_attributes\": {}\n            },\n            \"metadata\": {}\n        },\n        {\n            \"id\": \"usr_64146368179995152\",\n            \"environment_id\": \"env_58327480066375686\",\n            \"create_time\": \"2025-03-18T12:36:54.890Z\",\n            \"update_time\": \"2025-03-18T12:36:54.890400Z\",\n            \"email\": \"testing@testing.com\",\n            \"external_id\": \"\",\n            \"identity\": \"\",\n            \"phone_number\": \"\",\n            \"organizations\": [\n                {\n                    \"id\": \"org_59615193906282635\",\n                    \"membership_status\": \"INACTIVE\",\n                    \"role\": \"ADMIN\",\n                    \"name\": \"Megasoft\",\n                    \"primary_identity_provider\": \"SCALEKIT\"\n                }\n            ],\n            \"user_profile\": {\n                \"id\": \"usp_64146368180060688\",\n                \"first_name\": \"\",\n                \"last_name\": \"\",\n                \"name\": \"\",\n                \"locale\": \"\",\n                \"email_verified\": false,\n                \"metadata\": {},\n                \"custom_attributes\": {}\n            },\n            \"metadata\": {}\n        },\n        {\n            \"id\": \"usr_64133709485310215\",\n            \"environment_id\": \"env_58327480066375686\",\n            \"create_time\": \"2025-03-18T10:31:09.720Z\",\n            \"update_time\": \"2025-03-18T10:31:09.727147Z\",\n            \"email\": \"test@testing.com\",\n            \"external_id\": \"\",\n            \"identity\": \"\",\n            \"phone_number\": \"\",\n            \"organizations\": [\n                {\n                    \"id\": \"org_59615193906282635\",\n                    \"membership_status\": \"INACTIVE\",\n                    \"role\": \"ADMIN\",\n                    \"name\": \"Megasoft\",\n                    \"primary_identity_provider\": \"SCALEKIT\"\n                }\n            ],\n            \"user_profile\": {\n                \"id\": \"usp_64133709485375751\",\n                \"first_name\": \"\",\n                \"last_name\": \"\",\n                \"name\": \"\",\n                \"locale\": \"\",\n                \"email_verified\": false,\n                \"metadata\": {},\n                \"custom_attributes\": {}\n            },\n            \"metadata\": {}\n        },\n        {\n            \"id\": \"usr_64133353640558855\",\n            \"environment_id\": \"env_58327480066375686\",\n            \"create_time\": \"2025-03-18T10:27:37.620Z\",\n            \"update_time\": \"2025-03-18T10:27:37.621629Z\",\n            \"email\": \"test@test.com\",\n            \"external_id\": \"\",\n            \"identity\": \"\",\n            \"phone_number\": \"\",\n            \"organizations\": [\n                {\n                    \"id\": \"org_59615193906282635\",\n                    \"membership_status\": \"INACTIVE\",\n                    \"role\": \"ADMIN\",\n                    \"name\": \"Megasoft\",\n                    \"primary_identity_provider\": \"SCALEKIT\"\n                }\n            ],\n            \"user_profile\": {\n                \"id\": \"usp_64133353640624391\",\n                \"first_name\": \"\",\n                \"last_name\": \"\",\n                \"name\": \"\",\n                \"locale\": \"\",\n                \"email_verified\": false,\n                \"metadata\": {},\n                \"custom_attributes\": {}\n            },\n            \"metadata\": {}\n        },\n        {\n            \"id\": \"usr_64119812715971385\",\n            \"environment_id\": \"env_58327480066375686\",\n            \"create_time\": \"2025-03-18T08:13:06.600Z\",\n            \"update_time\": \"2025-03-18T08:13:06.608198Z\",\n            \"email\": \"james.bond@scalar.com\",\n            \"external_id\": \"\",\n            \"identity\": \"\",\n            \"phone_number\": \"\",\n            \"organizations\": [\n                {\n                    \"id\": \"org_59615193906282635\",\n                    \"membership_status\": \"INACTIVE\",\n                    \"role\": \"ADMIN\",\n                    \"name\": \"Megasoft\",\n                    \"primary_identity_provider\": \"SCALEKIT\"\n                }\n            ],\n            \"user_profile\": {\n                \"id\": \"usp_64119812732748601\",\n                \"first_name\": \"James\",\n                \"last_name\": \"Bond\",\n                \"name\": \"james bond\",\n                \"locale\": \"\",\n                \"email_verified\": false,\n                \"metadata\": {},\n                \"custom_attributes\": {}\n            },\n            \"metadata\": {}\n        },\n        {\n            \"id\": \"usr_63996758530720562\",\n            \"environment_id\": \"env_58327480066375686\",\n            \"create_time\": \"2025-03-17T11:50:40.590Z\",\n            \"update_time\": \"2025-03-17T11:50:40.597549Z\",\n            \"email\": \"test@megasoft.com\",\n            \"external_id\": \"Ben\",\n            \"identity\": \"\",\n            \"phone_number\": \"\",\n            \"organizations\": [\n                {\n                    \"id\": \"org_59615193906282635\",\n                    \"membership_status\": \"INACTIVE\",\n                    \"role\": \"ADMIN\",\n                    \"name\": \"Megasoft\",\n                    \"primary_identity_provider\": \"SCALEKIT\"\n                }\n            ],\n            \"user_profile\": {\n                \"id\": \"usp_63996758547497778\",\n                \"first_name\": \"Ben\",\n                \"last_name\": \"Tennyson\",\n                \"name\": \"Ben Ten\",\n                \"locale\": \"\",\n                \"email_verified\": false,\n                \"metadata\": {},\n                \"custom_attributes\": {}\n            },\n            \"metadata\": {\n                \"k12\": \"v15\"\n            }\n        },\n        {\n            \"id\": \"usr_63995502554776374\",\n            \"environment_id\": \"env_58327480066375686\",\n            \"create_time\": \"2025-03-17T11:38:11.970Z\",\n            \"update_time\": \"2025-03-17T11:38:11.971862Z\",\n            \"email\": \"saif.shaik@gmail.com\",\n            \"external_id\": \"saif\",\n            \"identity\": \"\",\n            \"phone_number\": \"\",\n            \"organizations\": [\n                {\n                    \"id\": \"org_59615193906282635\",\n                    \"membership_status\": \"INACTIVE\",\n                    \"role\": \"ADMIN\",\n                    \"name\": \"Megasoft\",\n                    \"primary_identity_provider\": \"SCALEKIT\"\n                }\n            ],\n            \"user_profile\": {\n                \"id\": \"usp_63995502554841910\",\n                \"first_name\": \"Saif\",\n                \"last_name\": \"Shaik\",\n                \"name\": \"Saif Ali\",\n                \"locale\": \"\",\n                \"email_verified\": false,\n                \"metadata\": {},\n                \"custom_attributes\": {}\n            },\n            \"metadata\": {\n                \"k11\": \"v11\"\n            }\n        }\n    ],\n    \"prev_page_token\": \"\"\n}"
 						}
 					]
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/users/{{user_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"users",
+								"{{user_id}}"
+							]
+						},
+						"description": "Update user information such as email, external ID, or metadata.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"updated@example.com\",\n    \"external_id\": \"ext_123\",\n    \"metadata\": {\n        \"role\": \"admin\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/users/{{user_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organizations",
+								"{{organization_id}}",
+								"users",
+								"{{user_id}}"
+							]
+						},
+						"description": "Permanently delete a user from the organization."
+					},
+					"response": []
 				}
 			]
+		},
+		{
+			"name": "User Attributes",
+			"item": [
+				{
+					"name": "Directory User Attributes",
+					"item": [
+						{
+							"name": "List Directory User Attributes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/directory-user-attributes",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"directory-user-attributes"
+									]
+								},
+								"description": "List all custom attribute mappings for directory-synced users."
+							},
+							"response": []
+						},
+						{
+							"name": "Create Directory User Attribute",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{env_url}}/api/v1/directory-user-attributes",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"directory-user-attributes"
+									]
+								},
+								"description": "Create a new custom attribute mapping for directory-synced users.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"key\": \"department\",\n    \"map_to\": \"department\",\n    \"description\": \"User's department from directory\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Directory User Attribute",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{env_url}}/api/v1/directory-user-attributes/{{attribute_key}}",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"directory-user-attributes",
+										"{{attribute_key}}"
+									]
+								},
+								"description": "Update an existing directory user attribute mapping.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"map_to\": \"dept\",\n    \"description\": \"Updated mapping\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Directory User Attribute",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/directory-user-attributes/{{attribute_key}}",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"directory-user-attributes",
+										"{{attribute_key}}"
+									]
+								},
+								"description": "Remove a custom attribute mapping for directory-synced users."
+							},
+							"response": []
+						}
+					],
+					"description": "Manage custom attribute mappings for users synced via directory (SCIM) providers."
+				},
+				{
+					"name": "SSO User Attributes",
+					"item": [
+						{
+							"name": "List SSO User Attributes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/sso-user-attributes",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"sso-user-attributes"
+									]
+								},
+								"description": "List all custom attribute mappings for SSO-authenticated users."
+							},
+							"response": []
+						},
+						{
+							"name": "Create SSO User Attribute",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{env_url}}/api/v1/sso-user-attributes",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"sso-user-attributes"
+									]
+								},
+								"description": "Create a new custom attribute mapping for SSO-authenticated users.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"key\": \"role\",\n    \"map_to\": \"groups\",\n    \"description\": \"Map IdP groups to role attribute\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update SSO User Attribute",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{env_url}}/api/v1/sso-user-attributes/{{attribute_key}}",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"sso-user-attributes",
+										"{{attribute_key}}"
+									]
+								},
+								"description": "Update an existing SSO user attribute mapping.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"map_to\": \"updated_groups\",\n    \"description\": \"Updated mapping\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete SSO User Attribute",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/sso-user-attributes/{{attribute_key}}",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"sso-user-attributes",
+										"{{attribute_key}}"
+									]
+								},
+								"description": "Remove a custom attribute mapping for SSO users."
+							},
+							"response": []
+						}
+					],
+					"description": "Manage custom attribute mappings for users authenticated via SSO (SAML/OIDC)."
+				},
+				{
+					"name": "User Profile Attributes",
+					"item": [
+						{
+							"name": "List User Profile Attributes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/user-profile-attributes",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user-profile-attributes"
+									]
+								},
+								"description": "List all custom user profile attribute definitions."
+							},
+							"response": []
+						},
+						{
+							"name": "Create User Profile Attribute",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{env_url}}/api/v1/user-profile-attributes",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user-profile-attributes"
+									]
+								},
+								"description": "Create a new custom user profile attribute.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"key\": \"timezone\",\n    \"map_to\": \"timezone\",\n    \"description\": \"User's preferred timezone\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update User Profile Attribute",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{env_url}}/api/v1/user-profile-attributes/{{attribute_key}}",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user-profile-attributes",
+										"{{attribute_key}}"
+									]
+								},
+								"description": "Update an existing user profile attribute.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"map_to\": \"tz\",\n    \"description\": \"Updated timezone mapping\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete User Profile Attribute",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/user-profile-attributes/{{attribute_key}}",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user-profile-attributes",
+										"{{attribute_key}}"
+									]
+								},
+								"description": "Remove a custom user profile attribute."
+							},
+							"response": []
+						}
+					],
+					"description": "Manage custom user profile attributes that extend the default user profile schema."
+				}
+			],
+			"description": "Manage custom attribute mappings for users across different authentication sources. Attributes can be mapped from directory sync (SCIM), SSO (SAML/OIDC), or defined as custom user profile fields."
+		},
+		{
+			"name": "Roles",
+			"item": [
+				{
+					"name": "List Roles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/environments/{{env_id}}/roles",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"environments",
+								"{{env_id}}",
+								"roles"
+							]
+						},
+						"description": "List all roles defined in the environment."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Role",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{env_url}}/api/v1/environments/{{env_id}}/roles",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"environments",
+								"{{env_id}}",
+								"roles"
+							]
+						},
+						"description": "Create a new role in the environment.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"editor\",\n    \"display_name\": \"Editor\",\n    \"description\": \"Can edit content\",\n    \"default\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Role",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/environments/{{env_id}}/roles/{{role_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"environments",
+								"{{env_id}}",
+								"roles",
+								"{{role_id}}"
+							]
+						},
+						"description": "Retrieve details of a specific role."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Role",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{env_url}}/api/v1/environments/{{env_id}}/roles/{{role_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"environments",
+								"{{env_id}}",
+								"roles",
+								"{{role_id}}"
+							]
+						},
+						"description": "Update an existing role's display name, description, or default status.",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"display_name\": \"Senior Editor\",\n    \"description\": \"Can edit and publish content\",\n    \"default\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Role",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/environments/{{env_id}}/roles/{{role_id}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"environments",
+								"{{env_id}}",
+								"roles",
+								"{{role_id}}"
+							]
+						},
+						"description": "Permanently delete a role from the environment."
+					},
+					"response": []
+				}
+			],
+			"description": "Manage roles for role-based access control (RBAC). Roles can be assigned to users within organizations to control permissions."
 		},
 		{
 			"name": "Auth Methods",
@@ -4888,6 +6056,481 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Email",
+			"item": [
+				{
+					"name": "Email Servers",
+					"item": [
+						{
+							"name": "List Email Servers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/email/servers",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"email",
+										"servers"
+									]
+								},
+								"description": "List all configured email servers (SMTP) for the environment."
+							},
+							"response": []
+						},
+						{
+							"name": "Create Email Server",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{env_url}}/api/v1/email/servers",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"email",
+										"servers"
+									]
+								},
+								"description": "Configure a custom SMTP email server for sending authentication emails.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"provider\": 1,\n    \"settings\": {\n        \"host\": \"smtp.example.com\",\n        \"port\": 587,\n        \"username\": \"noreply@example.com\",\n        \"password\": \"your-smtp-password\",\n        \"from_email\": \"noreply@example.com\",\n        \"from_name\": \"Your App\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Email Server",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/email/servers/{{server_id}}",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"email",
+										"servers",
+										"{{server_id}}"
+									]
+								},
+								"description": "Retrieve details of a specific email server configuration."
+							},
+							"response": []
+						},
+						{
+							"name": "Update Email Server",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{env_url}}/api/v1/email/servers/{{server_id}}",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"email",
+										"servers",
+										"{{server_id}}"
+									]
+								},
+								"description": "Update the SMTP settings for an email server.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"host\": \"smtp.example.com\",\n    \"port\": 587,\n    \"username\": \"noreply@example.com\",\n    \"password\": \"updated-password\",\n    \"from_email\": \"noreply@example.com\",\n    \"from_name\": \"Your App (Updated)\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Email Server",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/email/servers/{{server_id}}",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"email",
+										"servers",
+										"{{server_id}}"
+									]
+								},
+								"description": "Remove a custom email server and revert to the default Scalekit email delivery."
+							},
+							"response": []
+						},
+						{
+							"name": "Enable Email Server",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/email/servers/{{server_id}}:enable",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"email",
+										"servers",
+										"{{server_id}}:enable"
+									]
+								},
+								"description": "Enable a previously disabled email server."
+							},
+							"response": []
+						},
+						{
+							"name": "Disable Email Server",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/email/servers/{{server_id}}:disable",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"email",
+										"servers",
+										"{{server_id}}:disable"
+									]
+								},
+								"description": "Disable an email server without deleting its configuration."
+							},
+							"response": []
+						}
+					],
+					"description": "Configure custom SMTP email servers for sending authentication-related emails (OTP, magic links, etc.)."
+				},
+				{
+					"name": "Email Templates",
+					"item": [
+						{
+							"name": "List Email Templates",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/email/templates",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"organizations",
+										"{{organization_id}}",
+										"email",
+										"templates"
+									]
+								},
+								"description": "List all email templates for an organization."
+							},
+							"response": []
+						},
+						{
+							"name": "Create Email Template",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/email/templates",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"organizations",
+										"{{organization_id}}",
+										"email",
+										"templates"
+									]
+								},
+								"description": "Create a custom email template for an organization.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"use_case\": 1,\n    \"subject\": \"Your verification code for {{app_name}}\",\n    \"html_content\": \"<h1>Your code is {{otp_code}}</h1>\",\n    \"plain_content\": \"Your code is {{otp_code}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Email Template",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/email/templates/{{template_id}}",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"organizations",
+										"{{organization_id}}",
+										"email",
+										"templates",
+										"{{template_id}}"
+									]
+								},
+								"description": "Retrieve a specific email template."
+							},
+							"response": []
+						},
+						{
+							"name": "Update Email Template",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/email/templates/{{template_id}}",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"organizations",
+										"{{organization_id}}",
+										"email",
+										"templates",
+										"{{template_id}}"
+									]
+								},
+								"description": "Update an existing email template.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"subject\": \"Updated: Your verification code\",\n    \"html_content\": \"<h1>Updated: Your code is {{otp_code}}</h1>\",\n    \"plain_content\": \"Updated: Your code is {{otp_code}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Email Template",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/email/templates/{{template_id}}",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"organizations",
+										"{{organization_id}}",
+										"email",
+										"templates",
+										"{{template_id}}"
+									]
+								},
+								"description": "Delete a custom email template and revert to the default."
+							},
+							"response": []
+						},
+						{
+							"name": "Enable Email Template",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/email/templates/{{template_id}}:enable",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"organizations",
+										"{{organization_id}}",
+										"email",
+										"templates",
+										"{{template_id}}:enable"
+									]
+								},
+								"description": "Enable a previously disabled email template."
+							},
+							"response": []
+						},
+						{
+							"name": "Disable Email Template",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/organizations/{{organization_id}}/email/templates/{{template_id}}:disable",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"organizations",
+										"{{organization_id}}",
+										"email",
+										"templates",
+										"{{template_id}}:disable"
+									]
+								},
+								"description": "Disable an email template without deleting it."
+							},
+							"response": []
+						},
+						{
+							"name": "Get Template Placeholders",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{env_url}}/api/v1/email/templates/placeholders",
+									"host": [
+										"{{env_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"email",
+										"templates",
+										"placeholders"
+									],
+									"query": [
+										{
+											"key": "use_case",
+											"value": "1",
+											"description": "Email use case type (e.g., OTP, magic link)",
+											"disabled": true
+										}
+									]
+								},
+								"description": "Get available placeholders that can be used in email templates."
+							},
+							"response": []
+						}
+					],
+					"description": "Customize email templates for authentication flows (OTP codes, magic links, etc.) per organization."
+				}
+			],
+			"description": "Configure custom email delivery and templates. Use custom SMTP servers instead of the default Scalekit email service, and customize the email templates sent to users during authentication flows."
+		},
+		{
+			"name": "Webhooks",
+			"item": [
+				{
+					"name": "Get Webhook Portal URL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/webhooks/portal-url",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhooks",
+								"portal-url"
+							]
+						},
+						"description": "Get the URL for the webhook management portal where you can configure webhook endpoints and subscriptions."
+					},
+					"response": []
+				},
+				{
+					"name": "Send Test Webhook Event",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{env_url}}/api/v1/webhooks/test-event/{{event_type}}",
+							"host": [
+								"{{env_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhooks",
+								"test-event",
+								"{{event_type}}"
+							]
+						},
+						"description": "Send a test webhook event to your configured endpoint. Useful for testing your webhook handler. Common event types: organization.create, connection.enable, directory.user.create"
+					},
+					"response": []
+				}
+			],
+			"description": "Configure and test webhook integrations. Webhooks allow your application to receive real-time notifications about events such as SSO connections being configured, directory sync updates, and organization changes."
 		},
 		{
 			"name": "M2M",
