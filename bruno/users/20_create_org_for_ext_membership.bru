@@ -1,0 +1,44 @@
+meta {
+  name: Create Org for External ID Membership Tests
+  type: http
+  seq: 20
+}
+
+post {
+  url: {{env_url}}/api/v1/organizations
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "display_name": "Acme Corp Ext Membership {{test_ext_org_ts}}",
+    "external_id": "ext-org-{{test_ext_org_ts}}"
+  }
+}
+
+script:pre-request {
+  const ts = Date.now();
+  bru.setEnvVar("test_ext_org_ts", ts.toString());
+}
+
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("test_ext_membership_orgid", res.body.organization.id);
+  }
+}
+
+tests {
+  test("status is 200 or 201", function() {
+    expect(res.status).to.be.oneOf([200, 201]);
+  });
+  test("response has organization object", function() {
+    expect(res.body.organization).to.be.an("object");
+  });
+  test("id has org_ prefix", function() {
+    expect(res.body.organization.id).to.match(/^org_/);
+  });
+  test("display_name is a string", function() {
+    expect(res.body.organization.display_name).to.be.a("string").and.not.empty;
+  });
+}

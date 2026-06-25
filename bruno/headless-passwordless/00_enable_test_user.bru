@@ -1,0 +1,36 @@
+meta {
+  name: Enable Test User Settings
+  type: http
+  seq: 1
+}
+
+patch {
+  url: {{env_url}}/api/v1/environments/{{envid}}/settings/test-user
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "test_user": {
+      "enabled": true,
+      "emails": ["user+sktest@example.com"],
+      "static_confirmation_code": "424242"
+    }
+  }
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("test_user is enabled", function() {
+    expect(res.body.test_user.enabled).to.equal(true);
+  });
+  test("test user email is configured", function() {
+    expect(res.body.test_user.emails).to.include("user+sktest@example.com");
+  });
+  test("static_confirmation_code is 424242", function() {
+    expect(res.body.test_user.static_confirmation_code).to.equal("424242");
+  });
+}

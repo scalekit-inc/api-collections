@@ -1,0 +1,85 @@
+meta {
+  name: Create Organization
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{env_url}}/api/v1/organizations
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "display_name": "{{test_org_name}}",
+    "external_id": "{{test_org_external_id}}",
+    "metadata": {
+      "plan": "enterprise",
+      "industry": "technology",
+      "region": "north-america"
+    },
+    "slug": "{{test_org_slug}}",
+    "logo_url": "https://logo.debounce.com/microsoft.com"
+  }
+}
+
+script:pre-request {
+  const ts = Date.now();
+  bru.setEnvVar("test_ts", ts.toString());
+  bru.setEnvVar("test_org_name", "Acme Corporation " + ts);
+  bru.setEnvVar("test_org_external_id", "acme-corp-" + ts);
+  bru.setEnvVar("test_org_slug", "acme-" + ts);
+}
+
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("test_orgid", res.body.organization.id);
+  }
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("response has organization object", function() {
+    expect(res.body.organization).to.be.an("object");
+  });
+  test("id has org_ prefix", function() {
+    expect(res.body.organization.id).to.match(/^org_/);
+  });
+  test("display_name matches sent value", function() {
+    expect(res.body.organization.display_name).to.equal(bru.getEnvVar("test_org_name"));
+  });
+  test("external_id matches sent value", function() {
+    expect(res.body.organization.external_id).to.equal(bru.getEnvVar("test_org_external_id"));
+  });
+  test("metadata is returned with correct values", function() {
+    const meta = res.body.organization.metadata;
+    expect(meta).to.be.an("object");
+    expect(meta.plan).to.equal("enterprise");
+    expect(meta.industry).to.equal("technology");
+    expect(meta.region).to.equal("north-america");
+  });
+  test("settings object is present", function() {
+    expect(res.body.organization.settings).to.be.an("object");
+  });
+  test("region_code is a non-empty string", function() {
+    expect(res.body.organization.region_code).to.be.a("string").and.not.empty;
+  });
+  test("settings.features is an array", function() {
+    expect(res.body.organization.settings.features).to.be.an("array");
+  });
+  test("slug matches sent value", function() {
+    expect(res.body.organization.slug).to.equal(bru.getEnvVar("test_org_slug"));
+  });
+  test("logo_url matches sent value", function() {
+    expect(res.body.organization.logo_url).to.equal("https://logo.debounce.com/microsoft.com");
+  });
+  test("create_time is present", function() {
+    expect(res.body.organization.create_time).to.exist;
+  });
+  test("update_time is present", function() {
+    expect(res.body.organization.update_time).to.exist;
+  });
+}

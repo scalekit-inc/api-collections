@@ -1,0 +1,17 @@
+meta {
+  name: Delete Stale Interceptor (Cleanup)
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{env_url}}/api/v1/interceptors/{{test_stale_interceptorid}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200, 204 or 400 (no stale interceptor)", function() {
+    expect(res.status).to.be.oneOf([200, 204, 400]);
+  });
+}

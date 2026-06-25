@@ -1,0 +1,31 @@
+meta {
+  name: Validate Token
+  type: http
+  seq: 3
+}
+post {
+  url: {{env_url}}/api/v1/tokens:validate
+  body: json
+  auth: inherit
+}
+body:json {
+  {
+    "token": "{{test_token_value}}"
+  }
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("token_info is returned", function() { expect(res.body.token_info).to.be.an("object"); });
+  test("token_id matches created token", function() { expect(res.body.token_info.token_id).to.equal(bru.getEnvVar("test_tokenid")); });
+  test("organization_id matches", function() { expect(res.body.token_info.organization_id).to.equal(bru.getEnvVar("test_tokens_orgid")); });
+  test("token_suffix is non-empty", function() { expect(res.body.token_info.token_suffix).to.be.a("string").and.not.empty; });
+  test("description matches", function() { expect(res.body.token_info.description).to.include("Acme Corp CI deployment token"); });
+  test("custom_claims is an object", function() { expect(res.body.token_info.custom_claims).to.be.an("object"); });
+  test("custom_claims env matches", function() { expect(res.body.token_info.custom_claims.env).to.equal("production"); });
+  test("custom_claims service matches", function() { expect(res.body.token_info.custom_claims.service).to.equal("ci-runner"); });
+  test("custom_claims team matches", function() { expect(res.body.token_info.custom_claims.team).to.equal("platform"); });
+  test("expiry is present", function() { expect(res.body.token_info.expiry).to.exist; });
+  test("created_at is present", function() { expect(res.body.token_info.created_at).to.exist; });
+  test("roles is an array", function() { expect(res.body.token_info.roles).to.be.an("array"); });
+  test("organization_external_id is a string", function() { expect(res.body.token_info.organization_external_id).to.be.a("string"); });
+}

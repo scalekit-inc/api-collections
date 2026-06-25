@@ -1,0 +1,27 @@
+meta {
+  name: Update Role
+  type: http
+  seq: 7
+}
+put {
+  url: {{env_url}}/api/v1/roles/{{test_rolename}}
+  body: json
+  auth: inherit
+}
+body:json {
+  {
+    "display_name": "Reports Reader Updated",
+    "description": "Can read and export all Acme Corp reports"
+  }
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("role id has role_ prefix", function() { expect(res.body.role.id).to.match(/^role_/); });
+  test("display_name reflects the update", function() { expect(res.body.role.display_name).to.equal("Reports Reader Updated"); });
+  test("description reflects the update", function() { expect(res.body.role.description).to.equal("Can read and export all Acme Corp reports"); });
+  test("name is unchanged", function() { expect(res.body.role.name).to.equal(bru.getEnvVar("test_rolename")); });
+  test("permissions is an array", function() { expect(res.body.role.permissions).to.be.an("array"); });
+  test("is_org_role is false for env-level role", function() { expect(res.body.role.is_org_role).to.equal(false); });
+  test("default_creator is a boolean", function() { expect(res.body.role.default_creator).to.be.a("boolean"); });
+  test("default_member is a boolean", function() { expect(res.body.role.default_member).to.be.a("boolean"); });
+}

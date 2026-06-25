@@ -1,0 +1,39 @@
+meta {
+  name: Create Domain
+  type: http
+  seq: 2
+}
+post {
+  url: {{env_url}}/api/v1/organizations/{{test_domains_orgid}}/domains
+  body: json
+  auth: inherit
+}
+body:json {
+  {
+    "domain": "acmecorp-{{test_domains_ts}}.io",
+    "domain_type": "ORGANIZATION_DOMAIN"
+  }
+}
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("test_domainid", res.body.domain.id);
+    bru.setEnvVar("test_domain_name", res.body.domain.domain);
+  }
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("response has domain object", function() { expect(res.body.domain).to.be.an("object"); });
+  test("id has dom_ prefix", function() { expect(res.body.domain.id).to.match(/^dom_/); });
+  test("domain name matches sent value", function() {
+    const ts = bru.getEnvVar("test_domains_ts");
+    expect(res.body.domain.domain).to.equal("acmecorp-" + ts + ".io");
+  });
+  test("organization_id matches", function() { expect(res.body.domain.organization_id).to.equal(bru.getEnvVar("test_domains_orgid")); });
+  test("verification_status is non-empty", function() { expect(res.body.domain.verification_status).to.be.a("string").and.not.empty; });
+  test("txt_record_key is present", function() { expect(res.body.domain.txt_record_key).to.be.a("string").and.not.empty; });
+  test("create_time is present", function() { expect(res.body.domain.create_time).to.exist; });
+  test("update_time is present", function() { expect(res.body.domain.update_time).to.exist; });
+  test("environment_id is present", function() { expect(res.body.domain.environment_id).to.be.a("string").and.not.empty; });
+  test("domain_type matches sent value", function() { expect(res.body.domain.domain_type).to.equal("ORGANIZATION_DOMAIN"); });
+  test("verification_method is present", function() { expect(res.body.domain.verification_method).to.be.a("string").and.not.empty; });
+}

@@ -1,0 +1,40 @@
+meta {
+  name: List Tokens
+  type: http
+  seq: 4
+}
+get {
+  url: {{env_url}}/api/v1/tokens?organization_id={{test_tokens_orgid}}
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("tokens is an array", function() { expect(res.body.tokens).to.be.an("array"); });
+  test("created token appears in list", function() {
+    const ids = res.body.tokens.map(function(t) { return t.token_id; });
+    expect(ids).to.include(bru.getEnvVar("test_tokenid"));
+  });
+  test("total_count is a number", function() { expect(res.body.total_count).to.be.a("number"); });
+  test("total_count is at least 1", function() { expect(res.body.total_count).to.be.at.least(1); });
+  test("next_page_token is a string", function() { expect(res.body.next_page_token).to.be.a("string"); });
+  test("prev_page_token is a string", function() { expect(res.body.prev_page_token).to.be.a("string"); });
+  test("each token has a token_id", function() {
+    res.body.tokens.forEach(function(t) { expect(t.token_id).to.be.a("string").and.not.empty; });
+  });
+  test("each token has an organization_id", function() {
+    res.body.tokens.forEach(function(t) { expect(t.organization_id).to.be.a("string").and.not.empty; });
+  });
+  test("each token has a token_suffix", function() {
+    res.body.tokens.forEach(function(t) { expect(t.token_suffix).to.be.a("string").and.not.empty; });
+  });
+  test("each token has created_at", function() {
+    res.body.tokens.forEach(function(t) { expect(t.created_at).to.exist; });
+  });
+  test("each token has custom_claims object", function() {
+    res.body.tokens.forEach(function(t) { expect(t.custom_claims).to.be.an("object"); });
+  });
+  test("each token has roles array", function() {
+    res.body.tokens.forEach(function(t) { expect(t.roles).to.be.an("array"); });
+  });
+}

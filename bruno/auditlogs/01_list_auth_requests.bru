@@ -1,0 +1,83 @@
+meta {
+  name: List Auth Requests
+  type: http
+  seq: 1
+}
+get {
+  url: {{env_url}}/api/v1/logs/authentication/requests?page_size=10
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("authRequests is an array", function() { expect(res.body.authRequests).to.be.an("array"); });
+  test("next_page_token field is present and a string", function() {
+    expect(res.body).to.have.property("next_page_token");
+    expect(res.body.next_page_token).to.be.a("string");
+  });
+  test("prev_page_token field is present and a string", function() {
+    expect(res.body).to.have.property("prev_page_token");
+    expect(res.body.prev_page_token).to.be.a("string");
+  });
+  test("total_size is a non-negative number", function() { expect(res.body.total_size).to.be.a("number").and.at.least(0); });
+  test("each entry has auth_request_id", function() {
+    res.body.authRequests.forEach(function(r) {
+      expect(r.auth_request_id).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each entry has organization_id", function() {
+    res.body.authRequests.forEach(function(r) {
+      expect(r.organization_id).to.be.a("string");
+    });
+  });
+  test("each entry has environment_id", function() {
+    res.body.authRequests.forEach(function(r) {
+      expect(r.environment_id).to.match(/^env_/);
+    });
+  });
+  test("each entry has a timestamp", function() {
+    res.body.authRequests.forEach(function(r) {
+      expect(r.timestamp).to.exist;
+    });
+  });
+  test("each entry has a status", function() {
+    res.body.authRequests.forEach(function(r) {
+      expect(r.status).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each entry has connection_type string", function() {
+    res.body.authRequests.forEach(function(r) {
+      expect(r.connection_type).to.be.a("string");
+    });
+  });
+  test("each entry has connection_provider string", function() {
+    res.body.authRequests.forEach(function(r) {
+      expect(r.connection_provider).to.be.a("string");
+    });
+  });
+  test("each entry has connection_details as an array", function() {
+    res.body.authRequests.forEach(function(r) {
+      expect(r.connection_details).to.be.an("array");
+    });
+  });
+  test("each entry has workflow string", function() {
+    res.body.authRequests.forEach(function(r) {
+      expect(r.workflow).to.be.a("string");
+    });
+  });
+  test("each entry has client_id string", function() {
+    res.body.authRequests.forEach(function(r) {
+      expect(r.client_id).to.be.a("string");
+    });
+  });
+  test("each entry has client_name string", function() {
+    res.body.authRequests.forEach(function(r) {
+      expect(r.client_name).to.be.a("string");
+    });
+  });
+  test("each entry has client_type string", function() {
+    res.body.authRequests.forEach(function(r) {
+      expect(r.client_type).to.be.a("string");
+    });
+  });
+}

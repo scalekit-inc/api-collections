@@ -1,0 +1,41 @@
+meta {
+  name: Get Organization Session Policy
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{env_url}}/api/v1/organizations/{{test_orgid}}/session-policy
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("response has policy object", function() {
+    expect(res.body.policy).to.be.an("object");
+  });
+  test("policy_source is a non-empty string", function() {
+    expect(res.body.policy.policy_source).to.be.a("string").and.not.empty;
+  });
+  test("policy_source is APPLICATION or CUSTOM", function() {
+    expect(["APPLICATION", "CUSTOM"]).to.include(res.body.policy.policy_source);
+  });
+  test("when CUSTOM: absolute_session_timeout is a number", function() {
+    if (res.body.policy.policy_source === "CUSTOM") {
+      expect(res.body.policy.absolute_session_timeout).to.be.a("number");
+    }
+  });
+  test("when CUSTOM: idle_session_timeout_enabled is a boolean", function() {
+    if (res.body.policy.policy_source === "CUSTOM") {
+      expect(res.body.policy.idle_session_timeout_enabled).to.be.a("boolean");
+    }
+  });
+  test("when CUSTOM with idle enabled: idle_session_timeout is a number", function() {
+    if (res.body.policy.policy_source === "CUSTOM" && res.body.policy.idle_session_timeout_enabled === true) {
+      expect(res.body.policy.idle_session_timeout).to.be.a("number");
+    }
+  });
+}

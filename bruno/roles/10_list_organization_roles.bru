@@ -1,0 +1,27 @@
+meta {
+  name: List Organization Roles
+  type: http
+  seq: 10
+}
+get {
+  url: {{env_url}}/api/v1/organizations/{{test_roles_orgid}}/roles
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("roles is an array", function() { expect(res.body.roles).to.be.an("array"); });
+  test("org role appears in list", function() {
+    const names = res.body.roles.map(function(r) { return r.name; });
+    expect(names).to.include(bru.getEnvVar("test_org_rolename"));
+  });
+  test("each role has an id with role_ prefix", function() {
+    res.body.roles.forEach(function(r) { expect(r.id).to.match(/^role_/); });
+  });
+  test("each role has a name string", function() {
+    res.body.roles.forEach(function(r) { expect(r.name).to.be.a("string").and.not.empty; });
+  });
+  test("each role has a display_name string", function() {
+    res.body.roles.forEach(function(r) { expect(r.display_name).to.be.a("string").and.not.empty; });
+  });
+}

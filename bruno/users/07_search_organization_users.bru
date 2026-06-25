@@ -1,0 +1,33 @@
+meta {
+  name: Search Organization Users
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{env_url}}/api/v1/organizations/{{test_users_orgid}}/users:search?query=jane.smith&page_size=10
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("users is an array", function() {
+    expect(res.body.users).to.be.an("array");
+  });
+  test("total_size is a non-negative number", function() {
+    expect(res.body.total_size).to.be.a("number").and.at.least(0);
+  });
+  test("next_page_token field is present", function() {
+    expect(res.body).to.have.property("next_page_token");
+  });
+  test("prev_page_token field is present", function() {
+    expect(res.body).to.have.property("prev_page_token");
+  });
+  test("created user appears in search results", function() {
+    const ids = res.body.users.map(function(u) { return u.id; });
+    expect(ids).to.include(bru.getEnvVar("test_userid"));
+  });
+}

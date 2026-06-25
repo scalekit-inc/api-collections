@@ -1,0 +1,20 @@
+meta {
+  name: List Resource Clients
+  type: http
+  seq: 16
+}
+get {
+  url: {{env_url}}/api/v1/resources/{{test_resourceid}}/clients
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("clients is an array", function() { expect(res.body.clients).to.be.an("array"); });
+  test("total_dcr_clients is a number", function() { expect(res.body.total_dcr_clients).to.be.a("number"); });
+  test("total_static_clients is a number", function() { expect(res.body.total_static_clients).to.be.a("number"); });
+  test("created resource client appears in list", function() {
+    const ids = res.body.clients.map(function(c) { return c.client_id; });
+    expect(ids).to.include(bru.getEnvVar("test_resource_clientid"));
+  });
+}

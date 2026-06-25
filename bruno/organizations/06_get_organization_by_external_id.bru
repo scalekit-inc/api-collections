@@ -1,0 +1,49 @@
+meta {
+  name: Get Organization By External ID
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{env_url}}/api/v1/organizations:external/{{test_org_external_id}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("response has organization object", function() {
+    expect(res.body.organization).to.be.an("object");
+  });
+  test("id matches the created organization", function() {
+    expect(res.body.organization.id).to.equal(bru.getEnvVar("test_orgid"));
+  });
+  test("external_id matches the queried value", function() {
+    expect(res.body.organization.external_id).to.equal(bru.getEnvVar("test_org_external_id"));
+  });
+  test("display_name matches the updated name", function() {
+    expect(res.body.organization.display_name).to.equal(bru.getEnvVar("test_org_updated_name"));
+  });
+  test("metadata is present with correct keys", function() {
+    const meta = res.body.organization.metadata;
+    expect(meta).to.be.an("object");
+    expect(meta.plan).to.equal("enterprise-plus");
+    expect(meta.industry).to.equal("technology");
+    expect(meta.region).to.equal("north-america");
+  });
+  test("settings is present with features array", function() {
+    expect(res.body.organization.settings).to.be.an("object");
+    expect(res.body.organization.settings.features).to.be.an("array");
+  });
+  test("region_code is a non-empty string", function() {
+    expect(res.body.organization.region_code).to.be.a("string").and.not.empty;
+  });
+  test("create_time is present", function() {
+    expect(res.body.organization.create_time).to.exist;
+  });
+  test("update_time is present", function() {
+    expect(res.body.organization.update_time).to.exist;
+  });
+}

@@ -1,0 +1,46 @@
+meta {
+  name: Search Organizations
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{env_url}}/api/v1/organizations:search?query=Acme&page_size=10
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("organizations is an array", function() {
+    expect(res.body.organizations).to.be.an("array");
+  });
+  test("total_size is a non-negative number", function() {
+    expect(res.body.total_size).to.be.a("number");
+  });
+  test("next_page_token field is present", function() {
+    expect(res.body).to.have.property("next_page_token");
+  });
+  test("prev_page_token field is present", function() {
+    expect(res.body).to.have.property("prev_page_token");
+  });
+  test("search returns at least one result", function() {
+    expect(res.body.organizations.length).to.be.at.least(1);
+  });
+  test("each result has id with org_ prefix", function() {
+    res.body.organizations.forEach(function(org) {
+      expect(org.id).to.match(/^org_/);
+    });
+  });
+  test("each result has a non-empty display_name", function() {
+    res.body.organizations.forEach(function(org) {
+      expect(org.display_name).to.be.a("string").and.not.empty;
+    });
+  });
+  test("created organization appears in results", function() {
+    const ids = res.body.organizations.map(function(o) { return o.id; });
+    expect(ids).to.include(bru.getEnvVar("test_orgid"));
+  });
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Get Domain
+  type: http
+  seq: 3
+}
+get {
+  url: {{env_url}}/api/v1/organizations/{{test_domains_orgid}}/domains/{{test_domainid}}
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("response has domain object", function() { expect(res.body.domain).to.be.an("object"); });
+  test("id matches the created domain", function() { expect(res.body.domain.id).to.equal(bru.getEnvVar("test_domainid")); });
+  test("id has dom_ prefix", function() { expect(res.body.domain.id).to.match(/^dom_/); });
+  test("domain name matches", function() { expect(res.body.domain.domain).to.equal(bru.getEnvVar("test_domain_name")); });
+  test("organization_id matches", function() { expect(res.body.domain.organization_id).to.equal(bru.getEnvVar("test_domains_orgid")); });
+  test("environment_id is present", function() { expect(res.body.domain.environment_id).to.be.a("string").and.not.empty; });
+  test("verification_status is present", function() { expect(res.body.domain.verification_status).to.be.a("string").and.not.empty; });
+  test("domain_type is present", function() { expect(res.body.domain.domain_type).to.be.a("string").and.not.empty; });
+  test("verification_method is present", function() { expect(res.body.domain.verification_method).to.be.a("string").and.not.empty; });
+  test("txt_record_key is present", function() { expect(res.body.domain.txt_record_key).to.be.a("string").and.not.empty; });
+  test("create_time is present", function() { expect(res.body.domain.create_time).to.exist; });
+  test("update_time is present", function() { expect(res.body.domain.update_time).to.exist; });
+}

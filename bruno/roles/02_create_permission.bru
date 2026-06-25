@@ -1,0 +1,33 @@
+meta {
+  name: Create Permission
+  type: http
+  seq: 2
+}
+post {
+  url: {{env_url}}/api/v1/permissions
+  body: json
+  auth: inherit
+}
+body:json {
+  {
+    "name": "read_reports_{{test_roles_ts}}",
+    "description": "Allows reading all reports in Acme Corp"
+  }
+}
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("test_permname", res.body.permission.name);
+  }
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("permission has perm_ prefix", function() { expect(res.body.permission.id).to.match(/^perm_/); });
+  test("name matches sent value", function() {
+    const ts = bru.getEnvVar("test_roles_ts");
+    expect(res.body.permission.name).to.equal("read_reports_" + ts);
+  });
+  test("is_scalekit_permission is false", function() { expect(res.body.permission.is_scalekit_permission).to.equal(false); });
+  test("description matches sent value", function() { expect(res.body.permission.description).to.equal("Allows reading all reports in Acme Corp"); });
+  test("update_time is present", function() { expect(res.body.permission.update_time).to.exist; });
+  test("create_time is present", function() { expect(res.body.permission.create_time).to.exist; });
+}

@@ -1,0 +1,29 @@
+meta {
+  name: Search Connected Accounts
+  type: http
+  seq: 5
+}
+get {
+  url: {{env_url}}/api/v1/connected_accounts:search?query=gmail
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("connected_accounts is an array", function() { expect(res.body.connected_accounts).to.be.an("array"); });
+  test("total_size is a non-negative number", function() { expect(res.body.total_size).to.be.a("number").and.at.least(0); });
+  test("next_page_token field is present", function() { expect(res.body).to.have.property("next_page_token"); });
+  test("prev_page_token field is present", function() { expect(res.body).to.have.property("prev_page_token"); });
+  test("each account has id with ca_ prefix", function() {
+    res.body.connected_accounts.forEach(function(ca) { expect(ca.id).to.match(/^ca_/); });
+  });
+  test("each account has a non-empty connector", function() {
+    res.body.connected_accounts.forEach(function(ca) { expect(ca.connector).to.be.a("string").and.not.empty; });
+  });
+  test("each account has a non-empty status", function() {
+    res.body.connected_accounts.forEach(function(ca) { expect(ca.status).to.be.a("string").and.not.empty; });
+  });
+  test("each account has a non-empty authorization_type", function() {
+    res.body.connected_accounts.forEach(function(ca) { expect(ca.authorization_type).to.be.a("string").and.not.empty; });
+  });
+}

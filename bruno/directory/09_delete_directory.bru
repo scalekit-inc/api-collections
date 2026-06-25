@@ -1,0 +1,17 @@
+meta {
+  name: Delete Directory
+  type: http
+  seq: 9
+}
+
+delete {
+  url: {{env_url}}/api/v1/organizations/{{test_dir_orgid}}/directories/{{test_directoryid}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200 or 204", function() {
+    expect(res.status).to.be.oneOf([200, 204]);
+  });
+}

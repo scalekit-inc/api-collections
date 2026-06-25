@@ -1,0 +1,30 @@
+meta {
+  name: Update Interceptor
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{env_url}}/api/v1/interceptors/{{test_interceptorid}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "display_name": "Acme Auth Interceptor Updated",
+    "description": "Updated post-auth webhook for Acme Corp compliance checks",
+    "failure_policy": "FAIL_CLOSED"
+  }
+}
+
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("id is unchanged", function() { expect(res.body.interceptor.id).to.equal(bru.getEnvVar("test_interceptorid")); });
+  test("display_name reflects the update", function() { expect(res.body.interceptor.display_name).to.equal("Acme Auth Interceptor Updated"); });
+  test("failure_policy reflects the update", function() { expect(res.body.interceptor.failure_policy).to.equal("FAIL_CLOSED"); });
+  test("trigger_point is unchanged", function() { expect(res.body.interceptor.trigger_point).to.equal("POST_USER_AUTHENTICATION"); });
+  test("interceptor_type is still AUTH", function() { expect(res.body.interceptor.interceptor_type).to.equal("AUTH"); });
+  test("enabled is a boolean", function() { expect(res.body.interceptor.enabled).to.be.a("boolean"); });
+  test("updated_at is present", function() { expect(res.body.interceptor.updated_at).to.exist; });
+}

@@ -1,0 +1,61 @@
+meta {
+  name: Update User by External ID
+  type: http
+  seq: 19
+}
+
+patch {
+  url: {{env_url}}/api/v1/users:external/{{test_user_updated_external_id}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "user_profile": {
+      "given_name": "JaneExtUpdated",
+      "family_name": "SmithExtUpdated",
+      "locale": "en-GB"
+    },
+    "metadata": {
+      "source": "ext-id-update-test",
+      "env_tier": "staging"
+    }
+  }
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("response has user object", function() {
+    expect(res.body.user).to.be.an("object");
+  });
+  test("id is unchanged", function() {
+    expect(res.body.user.id).to.equal(bru.getEnvVar("test_userid"));
+  });
+  test("external_id is unchanged", function() {
+    expect(res.body.user.external_id).to.equal(bru.getEnvVar("test_user_updated_external_id"));
+  });
+  test("email is unchanged", function() {
+    expect(res.body.user.email).to.equal(bru.getEnvVar("test_user_email"));
+  });
+  test("user_profile.given_name reflects update", function() {
+    expect(res.body.user.user_profile.given_name).to.equal("JaneExtUpdated");
+  });
+  test("user_profile.family_name reflects update", function() {
+    expect(res.body.user.user_profile.family_name).to.equal("SmithExtUpdated");
+  });
+  test("user_profile.locale reflects update", function() {
+    expect(res.body.user.user_profile.locale).to.equal("en-GB");
+  });
+  test("memberships is an array", function() {
+    expect(res.body.user.memberships).to.be.an("array").with.length.at.least(1);
+  });
+  test("update_time is present", function() {
+    expect(res.body.user.update_time).to.exist;
+  });
+  test("environment_id has env_ prefix", function() {
+    expect(res.body.user.environment_id).to.match(/^env_/);
+  });
+}

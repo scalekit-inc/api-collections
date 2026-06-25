@@ -32,19 +32,15 @@ Pre-configured API collections with authentication flows, example requests, and 
 
 ### Postman Collection
 
-The `postman` directory contains ready-to-use Postman collections and environments for testing Scalekit APIs. These collections include:
+The `postman` directory contains ready-to-use Postman collections and environments for testing Scalekit APIs.
 
-- Authentication flows
-- Single Sign-On (SSO) endpoints
-- Organization management APIs
-- Admin portal APIs
-- Connection management endpoints
+See the [Postman README](./postman/README.md) for import and setup instructions.
 
-See the [Postman README](./postman/README.md) for setup instructions.
+### Bruno Collection
 
-### Bruno Collection (Coming Soon)
+The `bruno` directory contains a comprehensive Bruno collection (sequenced flows, environments for local/staging/prod).
 
-The `bruno` directory will contain collections for [Bruno](https://www.usebruno.com/), a lightweight alternative to Postman. We're waiting for your feature requests to add Bruno collections - check the [Bruno README](./bruno/README.md) to learn more or request collections.
+See the [Bruno README](./bruno/README.md) for details.
 
 ## Why Use These Collections?
 
@@ -62,13 +58,15 @@ The `bruno` directory will contain collections for [Bruno](https://www.usebruno.
 
 ## Key API Categories Covered
 
-- **Authentication APIs**: OAuth 2.0 flows, token management, and session handling
-- **Organization Management**: Create, update, and manage enterprise organizations
-- **User Administration**: User lifecycle, roles, and permissions management  
-- **Connection APIs**: SAML/OIDC identity provider configuration
-- **Admin Portal**: Generate portal links and manage admin access
-- **Webhook Events**: Event subscriptions and payload handling
-- **Directory Sync**: SCIM 2.0 endpoints for automated user provisioning
+- **Authentication & M2M**: OAuth 2.0 / client credentials, tokens, sessions
+- **Organizations & Users**: Full lifecycle, external IDs, memberships
+- **Connections (SSO)**: SAML, OIDC, discovery, enable/disable
+- **Connected Accounts** (Agent Auth): OAuth + static token flows for 100+ connectors
+- **Directory Sync (SCIM)**: Directories, users, groups, events
+- **Roles & Permissions / RBAC**
+- **MCP & Interceptors**: Model Context Protocol configs and request interceptors
+- **Admin Portal & Secrets management**
+- **Webhooks & Events**
 
 ## Additional Resources
 
@@ -76,7 +74,7 @@ The `bruno` directory will contain collections for [Bruno](https://www.usebruno.
   - 🔧 [API Reference](https://docs.scalekit.com/apis/)
   - 🚀 [Full Stack Auth Quickstart](https://docs.scalekit.com/fsa/quickstart/)
   - 💬 [Community Examples](https://github.com/orgs/scalekit-developers/repositories)
-  - 📋 [OpenAPI Specification](/spec/)
+  - 📋 [OpenAPI Specification](./spec/scalekit.scalar.yaml) (or `scalekit.openapi.yaml`)
 
 ---
 

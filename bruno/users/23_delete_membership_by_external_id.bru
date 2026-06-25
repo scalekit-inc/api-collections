@@ -1,0 +1,17 @@
+meta {
+  name: Delete Membership by External ID
+  type: http
+  seq: 23
+}
+
+delete {
+  url: {{env_url}}/api/v1/memberships/organizations/{{test_ext_membership_orgid}}/users:external/{{test_user_updated_external_id}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200 or 204", function() {
+    expect(res.status).to.be.oneOf([200, 204]);
+  });
+}

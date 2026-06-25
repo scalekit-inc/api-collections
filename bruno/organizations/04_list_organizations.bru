@@ -1,0 +1,56 @@
+meta {
+  name: List Organizations
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{env_url}}/api/v1/organizations?page_size=10
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("organizations is an array", function() {
+    expect(res.body.organizations).to.be.an("array");
+  });
+  test("total_size is at least 1", function() {
+    expect(res.body.total_size).to.be.a("number").and.at.least(1);
+  });
+  test("next_page_token field is present", function() {
+    expect(res.body).to.have.property("next_page_token");
+  });
+  test("prev_page_token field is present", function() {
+    expect(res.body).to.have.property("prev_page_token");
+  });
+  test("each organization has id with org_ prefix", function() {
+    res.body.organizations.forEach(function(org) {
+      expect(org.id).to.match(/^org_/);
+    });
+  });
+  test("each organization has a display_name string", function() {
+    res.body.organizations.forEach(function(org) {
+      expect(org.display_name).to.be.a("string");
+    });
+  });
+  test("each organization has settings with features array", function() {
+    res.body.organizations.forEach(function(org) {
+      if (org.settings && org.settings.features) {
+        expect(org.settings.features).to.be.an("array");
+      }
+    });
+  });
+  test("each organization has create_time and update_time", function() {
+    res.body.organizations.forEach(function(org) {
+      expect(org.create_time).to.exist;
+      expect(org.update_time).to.exist;
+    });
+  });
+  test("created organization appears in the list", function() {
+    const ids = res.body.organizations.map(function(o) { return o.id; });
+    expect(ids).to.include(bru.getEnvVar("test_orgid"));
+  });
+}

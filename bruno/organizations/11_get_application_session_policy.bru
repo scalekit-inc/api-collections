@@ -1,0 +1,40 @@
+meta {
+  name: Get Application Session Policy
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{env_url}}/api/v1/organizations/{{test_orgid}}/application-session-policy
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("response has application_policy object", function() {
+    expect(res.body.application_policy).to.be.an("object");
+  });
+  test("absolute_session_timeout is a number", function() {
+    expect(res.body.application_policy.absolute_session_timeout).to.be.a("number");
+  });
+  test("absolute_session_timeout_unit is a non-empty string", function() {
+    expect(res.body.application_policy.absolute_session_timeout_unit).to.be.a("string").and.not.empty;
+  });
+  test("idle_session_timeout_enabled is a boolean", function() {
+    expect(res.body.application_policy.idle_session_timeout_enabled).to.be.a("boolean");
+  });
+  test("idle_session_timeout is a number", function() {
+    expect(res.body.application_policy.idle_session_timeout).to.be.a("number");
+  });
+  test("idle_session_timeout_unit is a non-empty string when idle is enabled", function() {
+    if (res.body.application_policy.idle_session_timeout_enabled === true) {
+      expect(res.body.application_policy.idle_session_timeout_unit).to.be.a("string").and.not.empty;
+    }
+  });
+  test("access_token_expiry is a number", function() {
+    expect(res.body.application_policy.access_token_expiry).to.be.a("number");
+  });
+}

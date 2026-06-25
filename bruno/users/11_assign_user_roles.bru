@@ -1,0 +1,37 @@
+meta {
+  name: Assign User Roles
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{env_url}}/api/v1/organizations/{{test_users_orgid}}/users/{{test_userid}}/roles
+  body: json
+  auth: inherit
+}
+
+body:json {
+  [
+    { "role_name": "{{test_users_rolename}}" }
+  ]
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("roles is an array", function() {
+    expect(res.body.roles).to.be.an("array");
+  });
+  test("assigned role is present", function() {
+    const names = res.body.roles.map(function(r) { return r.name; });
+    expect(names).to.include(bru.getEnvVar("test_users_rolename"));
+  });
+  test("each role has id, name, display_name", function() {
+    res.body.roles.forEach(function(r) {
+      expect(r.id).to.be.a("string").and.not.empty;
+      expect(r.name).to.be.a("string").and.not.empty;
+      expect(r.display_name).to.be.a("string");
+    });
+  });
+}

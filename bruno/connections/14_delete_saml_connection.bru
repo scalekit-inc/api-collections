@@ -1,0 +1,17 @@
+meta {
+  name: Delete Connection
+  type: http
+  seq: 14
+}
+
+delete {
+  url: {{env_url}}/api/v1/organizations/{{test_conn_orgid}}/connections/{{test_connectionid}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200 or 204", function() {
+    expect(res.status).to.be.oneOf([200, 204]);
+  });
+}

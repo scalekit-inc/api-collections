@@ -1,0 +1,47 @@
+meta {
+  name: Create Token
+  type: http
+  seq: 2
+}
+post {
+  url: {{env_url}}/api/v1/tokens
+  body: json
+  auth: inherit
+}
+body:json {
+  {
+    "organization_id": "{{test_tokens_orgid}}",
+    "description": "Acme Corp CI deployment token {{test_tokens_ts}}",
+    "custom_claims": {
+      "env": "production",
+      "service": "ci-runner",
+      "team": "platform"
+    },
+    "expiry": "2030-01-01T00:00:00Z"
+  }
+}
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("test_tokenid", res.body.token_id);
+    bru.setEnvVar("test_token_value", res.body.token);
+  }
+}
+tests {
+  test("status is 200 or 201", function() { expect(res.status).to.be.oneOf([200, 201]); });
+  test("token is a non-empty string", function() { expect(res.body.token).to.be.a("string").and.not.empty; });
+  test("token_id has apit_ prefix", function() { expect(res.body.token_id).to.match(/^apit_/); });
+  test("token_info is an object", function() { expect(res.body.token_info).to.be.an("object"); });
+  test("token_info.token_id matches token_id at top level", function() { expect(res.body.token_info.token_id).to.equal(res.body.token_id); });
+  test("token_info has correct organization_id", function() { expect(res.body.token_info.organization_id).to.equal(bru.getEnvVar("test_tokens_orgid")); });
+  test("token_info description matches", function() {
+    expect(res.body.token_info.description).to.include("Acme Corp CI deployment token");
+  });
+  test("token_info custom_claims is an object", function() { expect(res.body.token_info.custom_claims).to.be.an("object"); });
+  test("token_info custom_claims env matches", function() { expect(res.body.token_info.custom_claims.env).to.equal("production"); });
+  test("token_info custom_claims service matches", function() { expect(res.body.token_info.custom_claims.service).to.equal("ci-runner"); });
+  test("token_info custom_claims team matches", function() { expect(res.body.token_info.custom_claims.team).to.equal("platform"); });
+  test("token_info expiry is present", function() { expect(res.body.token_info.expiry).to.exist; });
+  test("token_info token_suffix is non-empty", function() { expect(res.body.token_info.token_suffix).to.be.a("string").and.not.empty; });
+  test("token_info created_at is present", function() { expect(res.body.token_info.created_at).to.exist; });
+  test("token_info roles is an array", function() { expect(res.body.token_info.roles).to.be.an("array"); });
+}

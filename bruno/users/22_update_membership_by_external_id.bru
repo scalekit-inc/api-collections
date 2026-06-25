@@ -1,0 +1,50 @@
+meta {
+  name: Update Membership by External ID
+  type: http
+  seq: 22
+}
+
+patch {
+  url: {{env_url}}/api/v1/memberships/organizations/{{test_ext_membership_orgid}}/users:external/{{test_user_updated_external_id}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "roles": [],
+    "metadata": {
+      "source": "ext-id-membership-updated",
+      "team": "platform"
+    }
+  }
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("response has user object", function() {
+    expect(res.body.user).to.be.an("object");
+  });
+  test("user id is unchanged", function() {
+    expect(res.body.user.id).to.equal(bru.getEnvVar("test_userid"));
+  });
+  test("external_id is unchanged", function() {
+    expect(res.body.user.external_id).to.equal(bru.getEnvVar("test_user_updated_external_id"));
+  });
+  test("email is unchanged", function() {
+    expect(res.body.user.email).to.equal(bru.getEnvVar("test_user_email"));
+  });
+  test("memberships includes the org", function() {
+    expect(res.body.user.memberships).to.be.an("array").with.length.at.least(1);
+    const orgIds = res.body.user.memberships.map(function(m) { return m.organization_id; });
+    expect(orgIds).to.include(bru.getEnvVar("test_ext_membership_orgid"));
+  });
+  test("update_time is present", function() {
+    expect(res.body.user.update_time).to.exist;
+  });
+  test("environment_id has env_ prefix", function() {
+    expect(res.body.user.environment_id).to.match(/^env_/);
+  });
+}

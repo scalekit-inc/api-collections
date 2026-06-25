@@ -1,0 +1,34 @@
+meta {
+  name: List MCP
+  type: http
+  seq: 2
+}
+get {
+  url: {{env_url}}/api/v1/mcp
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("mcps is an array", function() { expect(res.body.mcps).to.be.an("array"); });
+  test("each mcp has an id string", function() {
+    res.body.mcps.forEach(function(mcp) {
+      expect(mcp.id).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each mcp has a connected_account_identifier string", function() {
+    res.body.mcps.forEach(function(mcp) {
+      expect(mcp.connected_account_identifier).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each mcp has a tool_mappings array", function() {
+    res.body.mcps.forEach(function(mcp) {
+      expect(mcp.tool_mappings).to.be.an("array");
+    });
+  });
+  test("each mcp has a url string", function() {
+    res.body.mcps.forEach(function(mcp) {
+      expect(mcp.url).to.be.a("string").and.not.empty;
+    });
+  });
+}

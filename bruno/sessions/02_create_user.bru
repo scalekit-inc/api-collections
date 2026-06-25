@@ -1,0 +1,29 @@
+meta {
+  name: Create User For Sessions Tests
+  type: http
+  seq: 2
+}
+post {
+  url: {{env_url}}/api/v1/organizations/{{test_sessions_orgid}}/users
+  body: json
+  auth: inherit
+}
+body:json {
+  {
+    "email": "sessions.user.{{test_sessions_ts}}@acmecorp.io",
+    "send_invitation_email": false,
+    "user_profile": {
+      "given_name": "Sessions",
+      "family_name": "Test User"
+    }
+  }
+}
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("test_sessions_userid", res.body.user.id);
+  }
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("user id has usr_ prefix", function() { expect(res.body.user.id).to.match(/^usr_/); });
+}

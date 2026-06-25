@@ -1,0 +1,63 @@
+meta {
+  name: List Connections
+  type: http
+  seq: 12
+}
+
+get {
+  url: {{env_url}}/api/v1/organizations/-/connections?page_size=10
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("connections is an array", function() {
+    expect(res.body.connections).to.be.an("array");
+  });
+  test("total_size is at least 1", function() {
+    expect(res.body.total_size).to.be.a("number").and.at.least(1);
+  });
+  test("next_page_token is a string", function() {
+    expect(res.body.next_page_token).to.be.a("string");
+  });
+  test("created SAML connection appears in list", function() {
+    const connId = bru.getEnvVar("test_connectionid");
+    if (connId) {
+      const ids = res.body.connections.map(function(c) { return c.id; });
+      expect(ids).to.include(connId);
+    }
+  });
+  test("each connection has id with conn_ prefix", function() {
+    res.body.connections.forEach(function(c) {
+      expect(c.id).to.match(/^conn_/);
+    });
+  });
+  test("each connection has provider", function() {
+    res.body.connections.forEach(function(c) {
+      expect(c.provider).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each connection has type", function() {
+    res.body.connections.forEach(function(c) {
+      expect(c.type).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each connection has status", function() {
+    res.body.connections.forEach(function(c) {
+      expect(c.status).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each connection has organization_id", function() {
+    res.body.connections.forEach(function(c) {
+      expect(c.organization_id).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each connection has enabled boolean", function() {
+    res.body.connections.forEach(function(c) {
+      expect(c.enabled).to.be.a("boolean");
+    });
+  });
+}

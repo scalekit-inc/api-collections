@@ -1,0 +1,29 @@
+meta {
+  name: List Directory Users
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{env_url}}/api/v1/organizations/{{test_dir_orgid}}/directories/{{test_directoryid}}/users
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("users is an array", function() {
+    expect(res.body.users).to.be.an("array");
+  });
+  test("total_size is a non-negative number", function() {
+    expect(res.body.total_size).to.be.a("number").and.at.least(0);
+  });
+  test("next_page_token is a string", function() {
+    expect(res.body.next_page_token).to.be.a("string");
+  });
+  test("prev_page_token is a string", function() {
+    expect(res.body.prev_page_token).to.be.a("string");
+  });
+}

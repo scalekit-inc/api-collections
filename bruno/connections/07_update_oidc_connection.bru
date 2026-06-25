@@ -1,0 +1,60 @@
+meta {
+  name: Update OIDC Connection With Config
+  type: http
+  seq: 7
+}
+patch {
+  url: {{env_url}}/api/v1/organizations/{{test_conn_orgid}}/connections/{{test_oidc_connectionid}}
+  body: json
+  auth: inherit
+}
+body:json {
+  {
+    "provider": "AUTH0",
+    "type": "OIDC",
+    "configuration_type": "DISCOVERY",  // required: without this the server treats the update as manual config and rejects saml_config/oidc_config fields
+    "debug_enabled": false,
+    "ui_button_title": "Sign in with Auth0",
+    "attribute_mapping": {
+      "email": "email",
+      "given_name": "given_name",
+      "family_name": "family_name",
+      "sub": "sub"
+    },
+    "oidc_config": {
+      "client_id": "dummy_client_id",
+      "client_secret": "dummy_client_secret",
+      "discovery_endpoint": "https://oidc.scalekit.dev/.well-known/openid-configuration",
+      "pkce_enabled": false,
+      "idp_logout_required": true
+    }
+  }
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("connection is an object", function() { expect(res.body.connection).to.be.an("object"); });
+  test("id is unchanged", function() { expect(res.body.connection.id).to.equal(bru.getEnvVar("test_oidc_connectionid")); });
+  test("provider is AUTH0", function() { expect(res.body.connection.provider).to.equal("AUTH0"); });
+  test("type is OIDC", function() { expect(res.body.connection.type).to.equal("OIDC"); });
+  test("status is COMPLETED after config", function() { expect(res.body.connection.status).to.equal("COMPLETED"); });
+  test("enabled is a boolean", function() { expect(res.body.connection.enabled).to.be.a("boolean"); });
+  test("debug_enabled is false", function() { expect(res.body.connection.debug_enabled).to.equal(false); });
+  test("configuration_type is DISCOVERY", function() { expect(res.body.connection.configuration_type).to.equal("DISCOVERY"); });
+  test("attribute_mapping is an object", function() { expect(res.body.connection.attribute_mapping).to.be.an("object"); });
+  test("attribute_mapping email is set", function() { expect(res.body.connection.attribute_mapping.email).to.equal("email"); });
+  test("oidc_config is returned", function() { expect(res.body.connection.oidc_config).to.be.an("object"); });
+  test("oidc_config.discovery_endpoint matches", function() {
+    expect(res.body.connection.oidc_config.discovery_endpoint).to.equal(
+      "https://oidc.scalekit.dev/.well-known/openid-configuration"
+    );
+  });
+  test("oidc_config.client_id matches", function() { expect(res.body.connection.oidc_config.client_id).to.equal("dummy_client_id"); });
+  test("oidc_config.issuer is populated from discovery", function() { expect(res.body.connection.oidc_config.issuer).to.be.a("string").and.not.empty; });
+  test("oidc_config.authorize_uri is a URL", function() { expect(res.body.connection.oidc_config.authorize_uri).to.match(/^https?:\/\//); });
+  test("oidc_config.token_uri is a URL", function() { expect(res.body.connection.oidc_config.token_uri).to.match(/^https?:\/\//); });
+  test("oidc_config.redirect_uri is a URL", function() { expect(res.body.connection.oidc_config.redirect_uri).to.match(/^https?:\/\//); });
+  test("oidc_config.pkce_enabled is a boolean", function() { expect(res.body.connection.oidc_config.pkce_enabled).to.be.a("boolean"); });
+  test("oidc_config.idp_logout_required is true", function() { expect(res.body.connection.oidc_config.idp_logout_required).to.equal(true); });
+  test("update_time is present", function() { expect(res.body.connection.update_time).to.exist; });
+  test("create_time is present", function() { expect(res.body.connection.create_time).to.exist; });
+}
