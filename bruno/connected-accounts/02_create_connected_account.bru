@@ -1,0 +1,35 @@
+meta {
+  name: Create Connected Account
+  type: http
+  seq: 2
+}
+post {
+  url: {{env_url}}/api/v1/connected_accounts
+  body: json
+  auth: inherit
+}
+body:json {
+  {
+    "organization_id": "{{test_ca_orgid}}",
+    "connector": "gmail",
+    "connected_account": {
+      "connector": "gmail"
+    }
+  }
+}
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("test_ca_id", res.body.connected_account.id);
+  }
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("response has connected_account object", function() { expect(res.body.connected_account).to.be.an("object"); });
+  test("id has ca_ prefix", function() { expect(res.body.connected_account.id).to.match(/^ca_/); });
+  test("connector is gmail", function() { expect(res.body.connected_account.connector).to.equal("gmail"); });
+  test("provider is GMAIL", function() { expect(res.body.connected_account.provider).to.equal("GMAIL"); });
+  test("status is non-empty", function() { expect(res.body.connected_account.status).to.be.a("string").and.not.empty; });
+  test("authorization_type is non-empty", function() { expect(res.body.connected_account.authorization_type).to.be.a("string").and.not.empty; });
+  test("updated_at is present", function() { expect(res.body.connected_account.updated_at).to.exist; });
+  test("connection_id is a non-empty string", function() { expect(res.body.connected_account.connection_id).to.be.a("string").and.not.empty; });
+}

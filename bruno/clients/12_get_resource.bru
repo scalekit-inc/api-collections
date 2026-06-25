@@ -1,0 +1,20 @@
+meta {
+  name: Get Resource
+  type: http
+  seq: 12
+}
+get {
+  url: {{env_url}}/api/v1/resources/{{test_resourceid}}
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("id matches", function() { expect(res.body.resource.id).to.equal(bru.getEnvVar("test_resourceid")); });
+  test("resource_type is WEB", function() { expect(res.body.resource.resource_type).to.equal("WEB"); });
+  test("name is non-empty", function() { expect(res.body.resource.name).to.be.a("string").and.not.empty; });
+  test("description is non-empty", function() { expect(res.body.resource.description).to.be.a("string").and.not.empty; });
+  test("scopes is an array", function() { expect(res.body.resource.scopes).to.be.an("array"); });
+  test("create_time is present", function() { expect(res.body.resource.create_time).to.exist; });
+  test("update_time is present", function() { expect(res.body.resource.update_time).to.exist; });
+}

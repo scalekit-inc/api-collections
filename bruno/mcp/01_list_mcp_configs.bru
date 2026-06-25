@@ -1,0 +1,32 @@
+meta {
+  name: List MCP Configs
+  type: http
+  seq: 1
+}
+get {
+  url: {{env_url}}/api/v1/mcp/configs
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("configs is an array", function() { expect(res.body.configs).to.be.an("array"); });
+  test("next_page_token field is present", function() { expect(res.body).to.have.property("next_page_token"); });
+  test("prev_page_token field is present", function() { expect(res.body).to.have.property("prev_page_token"); });
+  test("total_size is a non-negative number", function() { expect(res.body.total_size).to.be.a("number").and.at.least(0); });
+  test("each config has an id string", function() {
+    res.body.configs.forEach(function(cfg) {
+      expect(cfg.id).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each config has a name string", function() {
+    res.body.configs.forEach(function(cfg) {
+      expect(cfg.name).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each config has a connection_tool_mappings array", function() {
+    res.body.configs.forEach(function(cfg) {
+      expect(cfg.connection_tool_mappings).to.be.an("array");
+    });
+  });
+}

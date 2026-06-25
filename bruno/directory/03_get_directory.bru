@@ -1,0 +1,53 @@
+meta {
+  name: Get Directory
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{env_url}}/api/v1/organizations/{{test_dir_orgid}}/directories/{{test_directoryid}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("response has directory object", function() {
+    expect(res.body.directory).to.be.an("object");
+  });
+  test("id matches the created directory", function() {
+    expect(res.body.directory.id).to.equal(bru.getEnvVar("test_directoryid"));
+  });
+  test("directory_type is SCIM", function() {
+    expect(res.body.directory.directory_type).to.equal("SCIM");
+  });
+  test("organization_id matches", function() {
+    expect(res.body.directory.organization_id).to.equal(bru.getEnvVar("test_dir_orgid"));
+  });
+  test("directory_endpoint is a URL", function() {
+    expect(res.body.directory.directory_endpoint).to.match(/^https?:\/\//);
+  });
+  test("secrets is an array", function() {
+    expect(res.body.directory.secrets).to.be.an("array");
+  });
+  test("name is a string", function() {
+    expect(res.body.directory.name).to.be.a("string");
+  });
+  test("enabled is a boolean", function() {
+    expect(res.body.directory.enabled).to.be.a("boolean");
+  });
+  test("total_users is a non-negative number", function() {
+    expect(res.body.directory.total_users).to.be.a("number").and.at.least(0);
+  });
+  test("total_groups is a non-negative number", function() {
+    expect(res.body.directory.total_groups).to.be.a("number").and.at.least(0);
+  });
+  test("status is a string", function() {
+    expect(res.body.directory.status).to.be.a("string");
+  });
+  test("stats is an object", function() {
+    expect(res.body.directory.stats).to.be.an("object");
+  });
+}

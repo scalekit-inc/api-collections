@@ -1,0 +1,49 @@
+meta {
+  name: Update Organization Session Policy
+  type: http
+  seq: 10
+}
+
+patch {
+  url: {{env_url}}/api/v1/organizations/{{test_orgid}}/session-policy
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "policy_source": "CUSTOM",
+    "absolute_session_timeout": 480,
+    "absolute_session_timeout_unit": "MINUTES",
+    "idle_session_timeout_enabled": true,
+    "idle_session_timeout": 60,
+    "idle_session_timeout_unit": "MINUTES"
+  }
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("response has policy object", function() {
+    expect(res.body.policy).to.be.an("object");
+  });
+  test("policy_source reflects CUSTOM", function() {
+    expect(res.body.policy.policy_source).to.equal("CUSTOM");
+  });
+  test("absolute_session_timeout is a number", function() {
+    expect(res.body.policy.absolute_session_timeout).to.be.a("number");
+  });
+  test("absolute_session_timeout matches sent value in minutes", function() {
+    expect(res.body.policy.absolute_session_timeout).to.equal(480);
+  });
+  test("idle_session_timeout_enabled is true", function() {
+    expect(res.body.policy.idle_session_timeout_enabled).to.equal(true);
+  });
+  test("idle_session_timeout is a number", function() {
+    expect(res.body.policy.idle_session_timeout).to.be.a("number");
+  });
+  test("idle_session_timeout matches sent value in minutes", function() {
+    expect(res.body.policy.idle_session_timeout).to.equal(60);
+  });
+}

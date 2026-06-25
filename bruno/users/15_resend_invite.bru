@@ -1,0 +1,45 @@
+meta {
+  name: Resend Invite
+  type: http
+  seq: 27
+}
+
+patch {
+  url: {{env_url}}/api/v1/invites/organizations/{{test_users_orgid}}/users/{{test_userid}}/resend
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {}
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("response has invite object", function() {
+    expect(res.body.invite).to.be.an("object");
+  });
+  test("invite organization_id matches", function() {
+    expect(res.body.invite.organization_id).to.equal(bru.getEnvVar("test_users_orgid"));
+  });
+  test("invite user_id matches", function() {
+    expect(res.body.invite.user_id).to.equal(bru.getEnvVar("test_userid"));
+  });
+  test("invite status is a non-empty string", function() {
+    expect(res.body.invite.status).to.be.a("string").and.not.empty;
+  });
+  test("invite created_at is present", function() {
+    expect(res.body.invite.created_at).to.exist;
+  });
+  test("invite expires_at is present", function() {
+    expect(res.body.invite.expires_at).to.exist;
+  });
+  test("resent_count is a number", function() {
+    expect(res.body.invite.resent_count).to.be.a("number");
+  });
+  test("resent_count is at least 1 after resend", function() {
+    expect(res.body.invite.resent_count).to.be.at.least(1);
+  });
+}

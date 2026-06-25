@@ -1,0 +1,42 @@
+meta {
+  name: Get SAML Connection After Update
+  type: http
+  seq: 5
+}
+get {
+  url: {{env_url}}/api/v1/organizations/{{test_conn_orgid}}/connections/{{test_connectionid}}
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("connection is an object", function() { expect(res.body.connection).to.be.an("object"); });
+  test("id matches SAML connection", function() { expect(res.body.connection.id).to.equal(bru.getEnvVar("test_connectionid")); });
+  test("provider is ONELOGIN", function() { expect(res.body.connection.provider).to.equal("ONELOGIN"); });
+  test("type is SAML", function() { expect(res.body.connection.type).to.equal("SAML"); });
+  test("status is COMPLETED", function() { expect(res.body.connection.status).to.equal("COMPLETED"); });
+  test("enabled is a boolean", function() { expect(res.body.connection.enabled).to.be.a("boolean"); });
+  test("debug_enabled is a boolean", function() { expect(res.body.connection.debug_enabled).to.be.a("boolean"); });
+  test("organization_id matches", function() { expect(res.body.connection.organization_id).to.equal(bru.getEnvVar("test_conn_orgid")); });
+  test("configuration_type is DISCOVERY", function() { expect(res.body.connection.configuration_type).to.equal("DISCOVERY"); });
+  test("test_connection_uri is a URL", function() { expect(res.body.connection.test_connection_uri).to.match(/^https?:\/\//); });
+  test("saml_config is an object", function() { expect(res.body.connection.saml_config).to.be.an("object"); });
+  test("saml_config.idp_metadata_url persisted", function() {
+    expect(res.body.connection.saml_config.idp_metadata_url).to.equal(
+      "https://integrator-1249785.okta.com/app/exku46ucrdKWGvoSZ697/sso/saml/metadata"
+    );
+  });
+  test("saml_config.sp_entity_id is a URL", function() { expect(res.body.connection.saml_config.sp_entity_id).to.match(/^https?:\/\//); });
+  test("saml_config.sp_assertion_url is a URL", function() { expect(res.body.connection.saml_config.sp_assertion_url).to.match(/^https?:\/\//); });
+  test("saml_config.sp_metadata_url is a URL", function() { expect(res.body.connection.saml_config.sp_metadata_url).to.match(/^https?:\/\//); });
+  test("saml_config.idp_entity_id is non-empty", function() { expect(res.body.connection.saml_config.idp_entity_id).to.be.a("string").and.not.empty; });
+  test("saml_config.idp_sso_url is a URL", function() { expect(res.body.connection.saml_config.idp_sso_url).to.match(/^https?:\/\//); });
+  test("saml_config.idp_certificates has entries", function() { expect(res.body.connection.saml_config.idp_certificates).to.be.an("array").with.length.at.least(1); });
+  test("saml_config.idp_name_id_format is a string", function() { expect(res.body.connection.saml_config.idp_name_id_format).to.be.a("string"); });
+  test("saml_config.idp_sso_request_binding is a string", function() { expect(res.body.connection.saml_config.idp_sso_request_binding).to.be.a("string"); });
+  test("attribute_mapping is an object", function() { expect(res.body.connection.attribute_mapping).to.be.an("object"); });
+  test("attribute_mapping email is correct", function() { expect(res.body.connection.attribute_mapping.email).to.equal("email"); });
+  test("attribute_mapping family_name is correct", function() { expect(res.body.connection.attribute_mapping.family_name).to.equal("lastName"); });
+  test("create_time is present", function() { expect(res.body.connection.create_time).to.exist; });
+  test("update_time is present", function() { expect(res.body.connection.update_time).to.exist; });
+}

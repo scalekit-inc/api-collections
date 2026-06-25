@@ -1,0 +1,55 @@
+meta {
+  name: Get User
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{env_url}}/api/v1/users/{{test_userid}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("response has user object", function() {
+    expect(res.body.user).to.be.an("object");
+  });
+  test("id matches the created user", function() {
+    expect(res.body.user.id).to.equal(bru.getEnvVar("test_userid"));
+  });
+  test("email matches", function() {
+    expect(res.body.user.email).to.equal(bru.getEnvVar("test_user_email"));
+  });
+  test("external_id matches", function() {
+    expect(res.body.user.external_id).to.equal(bru.getEnvVar("test_user_external_id"));
+  });
+  test("environment_id has env_ prefix", function() {
+    expect(res.body.user.environment_id).to.match(/^env_/);
+  });
+  test("user_profile is an object", function() {
+    expect(res.body.user.user_profile).to.be.an("object");
+  });
+  test("user_profile.given_name is a non-empty string", function() {
+    expect(res.body.user.user_profile.given_name).to.be.a("string").and.not.empty;
+  });
+  test("memberships contains the org", function() {
+    expect(res.body.user.memberships).to.be.an("array").with.length.at.least(1);
+    const orgIds = res.body.user.memberships.map(function(m) { return m.organization_id; });
+    expect(orgIds).to.include(bru.getEnvVar("test_users_orgid"));
+  });
+  test("membership_status is a non-empty string", function() {
+    const membership = res.body.user.memberships.find(function(m) {
+      return m.organization_id === bru.getEnvVar("test_users_orgid");
+    });
+    expect(membership.membership_status).to.be.a("string").and.not.empty;
+  });
+  test("create_time is present", function() {
+    expect(res.body.user.create_time).to.exist;
+  });
+  test("update_time is present", function() {
+    expect(res.body.user.update_time).to.exist;
+  });
+}

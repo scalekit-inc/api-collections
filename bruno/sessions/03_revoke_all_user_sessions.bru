@@ -1,0 +1,33 @@
+meta {
+  name: Revoke All User Sessions
+  type: http
+  seq: 3
+}
+post {
+  url: {{env_url}}/api/v1/users/{{test_sessions_userid}}/sessions/revoke
+  body: json
+  auth: inherit
+}
+body:json {
+  {}
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("revoked_sessions is an array", function() { expect(res.body.revoked_sessions).to.be.an("array"); });
+  test("total_revoked is a non-negative number", function() { expect(res.body.total_revoked).to.be.a("number").and.at.least(0); });
+  test("total_revoked matches revoked_sessions length", function() { expect(res.body.total_revoked).to.equal(res.body.revoked_sessions.length); });
+  test("each revoked session has valid fields", function() {
+    res.body.revoked_sessions.forEach(function(session) {
+      expect(session.session_id).to.be.a("string").and.not.empty;
+      expect(session.session_id).to.match(/^ses_/);
+      expect(session.user_id).to.be.a("string").and.not.empty;
+      expect(session.user_id).to.match(/^usr_/);
+      expect(session.status).to.equal("revoked");
+      expect(session.created_at).to.exist;
+      expect(session.updated_at).to.exist;
+      expect(session.idle_expires_at).to.exist;
+      expect(session.absolute_expires_at).to.exist;
+      expect(session.last_active_at).to.exist;
+    });
+  });
+}

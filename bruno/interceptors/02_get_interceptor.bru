@@ -1,0 +1,59 @@
+meta {
+  name: Get Interceptor
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{env_url}}/api/v1/interceptors/{{test_interceptorid}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("response has interceptor object", function() {
+    expect(res.body.interceptor).to.be.an("object");
+  });
+  test("id matches the created interceptor", function() {
+    expect(res.body.interceptor.id).to.equal(bru.getEnvVar("test_interceptorid"));
+  });
+  test("display_name is non-empty", function() {
+    expect(res.body.interceptor.display_name).to.be.a("string").and.not.empty;
+  });
+  test("description is non-empty", function() {
+    expect(res.body.interceptor.description).to.be.a("string").and.not.empty;
+  });
+  test("trigger_point is POST_USER_AUTHENTICATION", function() {
+    expect(res.body.interceptor.trigger_point).to.equal("POST_USER_AUTHENTICATION");
+  });
+  test("interceptor_type is AUTH", function() {
+    expect(res.body.interceptor.interceptor_type).to.equal("AUTH");
+  });
+  test("api_url matches", function() {
+    expect(res.body.interceptor.api_url).to.equal("https://example.com/webhook");
+  });
+  test("timeout_ms is present", function() {
+    expect(res.body.interceptor.timeout_ms).to.exist;
+  });
+  test("failure_policy is non-empty", function() {
+    expect(res.body.interceptor.failure_policy).to.be.a("string").and.not.empty;
+  });
+  test("enabled is a boolean", function() {
+    expect(res.body.interceptor.enabled).to.be.a("boolean");
+  });
+  test("secret_id is present", function() {
+    expect(res.body.interceptor.secret_id).to.be.a("string").and.not.empty;
+  });
+  test("secret_suffix is present", function() {
+    expect(res.body.interceptor.secret_suffix).to.be.a("string").and.not.empty;
+  });
+  test("created_at is present", function() {
+    expect(res.body.interceptor.created_at).to.exist;
+  });
+  test("updated_at is present", function() {
+    expect(res.body.interceptor.updated_at).to.exist;
+  });
+}

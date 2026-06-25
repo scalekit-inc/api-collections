@@ -1,0 +1,47 @@
+meta {
+  name: Create Role
+  type: http
+  seq: 5
+}
+post {
+  url: {{env_url}}/api/v1/roles
+  body: json
+  auth: inherit
+}
+body:json {
+  {
+    "name": "reports_reader_{{test_roles_ts}}",
+    "display_name": "Reports Reader",
+    "description": "Can read all Acme Corp reports",
+    "permissions": ["{{test_permname}}"]
+  }
+}
+script:pre-request {
+  if (!bru.getEnvVar("test_permname")) {
+    throw new Error("test_permname is not set — 02_create_permission.bru must succeed before this step");
+  }
+}
+
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("test_rolename", res.body.role.name);
+  }
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("role id has role_ prefix", function() { expect(res.body.role.id).to.match(/^role_/); });
+  test("name matches sent value", function() {
+    const ts = bru.getEnvVar("test_roles_ts");
+    expect(res.body.role.name).to.equal("reports_reader_" + ts);
+  });
+  test("display_name matches", function() { expect(res.body.role.display_name).to.equal("Reports Reader"); });
+  test("description matches", function() { expect(res.body.role.description).to.equal("Can read all Acme Corp reports"); });
+  test("permissions array includes the created permission", function() {
+    const names = res.body.role.permissions.map(function(p) { return p.name; });
+    expect(names).to.include(bru.getEnvVar("test_permname"));
+  });
+  test("default_creator is a boolean", function() { expect(res.body.role.default_creator).to.be.a("boolean"); });
+  test("default_member is a boolean", function() { expect(res.body.role.default_member).to.be.a("boolean"); });
+  test("is_org_role is false for env-level role", function() { expect(res.body.role.is_org_role).to.equal(false); });
+  test("dependent_roles_count is a number", function() { expect(res.body.role.dependent_roles_count).to.be.a("number"); });
+}

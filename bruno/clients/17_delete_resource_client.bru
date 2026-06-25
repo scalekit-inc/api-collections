@@ -1,0 +1,13 @@
+meta {
+  name: Delete Resource Client
+  type: http
+  seq: 17
+}
+delete {
+  url: {{env_url}}/api/v1/resources/{{test_resourceid}}/clients/{{test_resource_clientid}}
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200 or 204", function() { expect(res.status).to.be.oneOf([200, 204]); });
+}

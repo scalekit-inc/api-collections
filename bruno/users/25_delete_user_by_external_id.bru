@@ -1,0 +1,17 @@
+meta {
+  name: Delete User by External ID
+  type: http
+  seq: 25
+}
+
+delete {
+  url: {{env_url}}/api/v1/users:external/{{test_throwaway_ext_id}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200 or 204", function() {
+    expect(res.status).to.be.oneOf([200, 204]);
+  });
+}

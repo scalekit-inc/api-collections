@@ -1,0 +1,25 @@
+meta {
+  name: List Permissions
+  type: http
+  seq: 4
+}
+get {
+  url: {{env_url}}/api/v1/permissions
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("permissions is an array", function() { expect(res.body.permissions).to.be.an("array"); });
+  test("total_size is present", function() { expect(res.body.total_size).to.be.a("number"); });
+  test("created permission appears in list", function() {
+    const names = res.body.permissions.map(function(p) { return p.name; });
+    expect(names).to.include(bru.getEnvVar("test_permname"));
+  });
+  test("each permission has an id with perm_ prefix", function() {
+    res.body.permissions.forEach(function(p) { expect(p.id).to.match(/^perm_/); });
+  });
+  test("each permission has a name string", function() {
+    res.body.permissions.forEach(function(p) { expect(p.name).to.be.a("string").and.not.empty; });
+  });
+}

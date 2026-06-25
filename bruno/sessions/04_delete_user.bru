@@ -1,0 +1,13 @@
+meta {
+  name: Delete User For Sessions Tests
+  type: http
+  seq: 4
+}
+delete {
+  url: {{env_url}}/api/v1/users/{{test_sessions_userid}}
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200 or 204", function() { expect(res.status).to.be.oneOf([200, 204]); });
+}

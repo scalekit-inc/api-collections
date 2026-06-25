@@ -1,0 +1,18 @@
+meta {
+  name: Invalidate Token
+  type: http
+  seq: 5
+}
+post {
+  url: {{env_url}}/api/v1/tokens:invalidate
+  body: json
+  auth: inherit
+}
+body:json {
+  {
+    "token": "{{test_token_value}}"
+  }
+}
+tests {
+  test("status is 200 or 204", function() { expect(res.status).to.be.oneOf([200, 204]); });
+}

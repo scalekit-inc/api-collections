@@ -1,0 +1,38 @@
+meta {
+  name: Create Organization Client
+  type: http
+  seq: 8
+}
+post {
+  url: {{env_url}}/api/v1/organizations/{{test_clients_orgid}}/clients
+  body: json
+  auth: inherit
+}
+body:json {
+  {
+    "name": "Acme Org M2M Client {{test_clients_ts}}",
+    "description": "Acme Corp organization-scoped M2M service account",
+    "scopes": ["openid"],
+    "audience": ["https://api.acmecorp.com"],
+    "custom_claims": [{"key": "service", "value": "deployment"}],
+    "expiry": 3600
+  }
+}
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("test_org_clientid", res.body.client.client_id);
+  }
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("client_id has m2morg_ prefix", function() { expect(res.body.client.client_id).to.match(/^m2morg_/); });
+  test("name matches", function() { expect(res.body.client.name).to.include("Acme Org M2M Client"); });
+  test("description matches", function() { expect(res.body.client.description).to.equal("Acme Corp organization-scoped M2M service account"); });
+  test("secrets array is present", function() { expect(res.body.client.secrets).to.be.an("array"); });
+  test("plain_secret is returned on creation", function() { expect(res.body.plain_secret).to.be.a("string").and.not.empty; });
+  test("scopes is an array", function() { expect(res.body.client.scopes).to.be.an("array"); });
+  test("audience is an array", function() { expect(res.body.client.audience).to.be.an("array"); });
+  test("custom_claims is an array", function() { expect(res.body.client.custom_claims).to.be.an("array"); });
+  test("create_time is present", function() { expect(res.body.client.create_time).to.exist; });
+  test("update_time is present", function() { expect(res.body.client.update_time).to.exist; });
+}

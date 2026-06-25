@@ -1,0 +1,36 @@
+meta {
+  name: Create Org-Level Test Role
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{env_url}}/api/v1/organizations/{{test_users_orgid}}/roles
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "test_role_{{test_users_ts}}",
+    "display_name": "Users Suite Test Role"
+  }
+}
+
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("test_users_rolename", res.body.role.name);
+  }
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("role is org-level", function() {
+    expect(res.body.role.is_org_role).to.equal(true);
+  });
+  test("role name has test_role_ prefix", function() {
+    expect(res.body.role.name).to.match(/^test_role_/);
+  });
+}

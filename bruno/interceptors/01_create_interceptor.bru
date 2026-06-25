@@ -1,0 +1,81 @@
+meta {
+  name: Create Interceptor
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{env_url}}/api/v1/interceptors
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "display_name": "Acme Auth Interceptor {{test_interceptor_ts}}",
+    "description": "Post-authentication webhook for Acme Corp identity validation",
+    "trigger_point": "POST_USER_AUTHENTICATION",
+    "interceptor_type": "AUTH",
+    "api_url": "https://example.com/webhook",
+    "failure_policy": "FAIL_OPEN"
+  }
+}
+
+script:pre-request {
+  const ts = Date.now();
+  bru.setEnvVar("test_interceptor_ts", ts.toString());
+}
+
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("test_interceptorid", res.body.interceptor.id);
+  }
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("response has interceptor object", function() {
+    expect(res.body.interceptor).to.be.an("object");
+  });
+  test("id has icp_ prefix", function() {
+    expect(res.body.interceptor.id).to.match(/^icp_/);
+  });
+  test("display_name is non-empty", function() {
+    expect(res.body.interceptor.display_name).to.be.a("string").and.not.empty;
+  });
+  test("trigger_point matches sent value", function() {
+    expect(res.body.interceptor.trigger_point).to.equal("POST_USER_AUTHENTICATION");
+  });
+  test("interceptor_type matches sent value", function() {
+    expect(res.body.interceptor.interceptor_type).to.equal("AUTH");
+  });
+  test("description matches sent value", function() {
+    expect(res.body.interceptor.description).to.equal("Post-authentication webhook for Acme Corp identity validation");
+  });
+  test("api_url matches sent value", function() {
+    expect(res.body.interceptor.api_url).to.equal("https://example.com/webhook");
+  });
+  test("timeout_ms is present", function() {
+    expect(res.body.interceptor.timeout_ms).to.exist;
+  });
+  test("failure_policy matches sent value", function() {
+    expect(res.body.interceptor.failure_policy).to.equal("FAIL_OPEN");
+  });
+  test("enabled is false initially", function() {
+    expect(res.body.interceptor.enabled).to.equal(false);
+  });
+  test("secret_id is present", function() {
+    expect(res.body.interceptor.secret_id).to.be.a("string").and.not.empty;
+  });
+  test("secret_suffix is present", function() {
+    expect(res.body.interceptor.secret_suffix).to.be.a("string").and.not.empty;
+  });
+  test("created_at is present", function() {
+    expect(res.body.interceptor.created_at).to.exist;
+  });
+  test("updated_at is present", function() {
+    expect(res.body.interceptor.updated_at).to.exist;
+  });
+}

@@ -1,0 +1,32 @@
+meta {
+  name: Create Resource
+  type: http
+  seq: 11
+}
+post {
+  url: {{env_url}}/api/v1/resources
+  body: json
+  auth: inherit
+}
+body:json {
+  {
+    "resource_type": "WEB",
+    "name": "Acme Reports API {{test_clients_ts}}",
+    "description": "Acme Corp reporting and analytics API"
+  }
+}
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("test_resourceid", res.body.resource.id);
+  }
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("id has res_ prefix", function() { expect(res.body.resource.id).to.match(/^res_/); });
+  test("name matches", function() { expect(res.body.resource.name).to.include("Acme Reports API"); });
+  test("resource_type is WEB", function() { expect(res.body.resource.resource_type).to.equal("WEB"); });
+  test("description matches", function() { expect(res.body.resource.description).to.equal("Acme Corp reporting and analytics API"); });
+  test("scopes is an array", function() { expect(res.body.resource.scopes).to.be.an("array"); });
+  test("create_time is present", function() { expect(res.body.resource.create_time).to.exist; });
+  test("update_time is present", function() { expect(res.body.resource.update_time).to.exist; });
+}

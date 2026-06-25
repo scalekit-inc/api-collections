@@ -1,0 +1,18 @@
+meta {
+  name: Delete Connected Account
+  type: http
+  seq: 6
+}
+post {
+  url: {{env_url}}/api/v1/connected_accounts:delete
+  body: json
+  auth: inherit
+}
+body:json {
+  {
+    "id": "{{test_ca_id}}"
+  }
+}
+tests {
+  test("status is 200 or 204", function() { expect(res.status).to.be.oneOf([200, 204]); });
+}

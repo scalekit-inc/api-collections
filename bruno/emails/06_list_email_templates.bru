@@ -1,0 +1,43 @@
+meta {
+  name: List Email Templates
+  type: http
+  seq: 6
+}
+get {
+  url: {{env_url}}/api/v1/organizations/{{test_emails_orgid}}/email/templates
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("templates is an array", function() { expect(res.body.templates).to.be.an("array"); });
+  test("created template appears in list", function() {
+    const ids = res.body.templates.map(function(t) { return t.id; });
+    expect(ids).to.include(bru.getEnvVar("test_templateid"));
+  });
+  test("each template has id with tpl_ prefix", function() {
+    res.body.templates.forEach(function(t) {
+      expect(t.id).to.match(/^tpl_/);
+    });
+  });
+  test("each template has a use_case string", function() {
+    res.body.templates.forEach(function(t) {
+      expect(t.use_case).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each template has a subject string", function() {
+    res.body.templates.forEach(function(t) {
+      expect(t.subject).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each template has placeholders array", function() {
+    res.body.templates.forEach(function(t) {
+      expect(t.placeholders).to.be.an("array");
+    });
+  });
+  test("each template has updated_at present", function() {
+    res.body.templates.forEach(function(t) {
+      expect(t.updated_at).to.exist;
+    });
+  });
+}

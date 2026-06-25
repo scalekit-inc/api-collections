@@ -1,0 +1,31 @@
+meta {
+  name: Upsert User Management Settings
+  type: http
+  seq: 13
+}
+
+patch {
+  url: {{env_url}}/api/v1/organizations/{{test_orgid}}/settings/usermanagement
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "settings": {
+      "max_allowed_users": 100
+    }
+  }
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("response has settings object", function() {
+    expect(res.body.settings).to.be.an("object");
+  });
+  test("max_allowed_users reflects the update", function() {
+    expect(res.body.settings.max_allowed_users).to.equal(100);
+  });
+}

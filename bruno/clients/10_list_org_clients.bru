@@ -1,0 +1,20 @@
+meta {
+  name: List Organization Clients
+  type: http
+  seq: 10
+}
+get {
+  url: {{env_url}}/api/v1/organizations/{{test_clients_orgid}}/clients
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("clients is an array", function() { expect(res.body.clients).to.be.an("array"); });
+  test("total_size is a non-negative number", function() { expect(res.body.total_size).to.be.a("number").and.at.least(0); });
+  test("next_page_token is a string", function() { expect(res.body.next_page_token).to.be.a("string"); });
+  test("created org client appears in list", function() {
+    const ids = res.body.clients.map(function(c) { return c.client_id; });
+    expect(ids).to.include(bru.getEnvVar("test_org_clientid"));
+  });
+}

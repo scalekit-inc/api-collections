@@ -1,0 +1,54 @@
+meta {
+  name: List Directories
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{env_url}}/api/v1/organizations/{{test_dir_orgid}}/directories
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("directories is an array", function() {
+    expect(res.body.directories).to.be.an("array");
+  });
+  test("created directory appears in list", function() {
+    const ids = res.body.directories.map(function(d) { return d.id; });
+    expect(ids).to.include(bru.getEnvVar("test_directoryid"));
+  });
+  test("each directory has id with dir_ prefix", function() {
+    res.body.directories.forEach(function(d) {
+      expect(d.id).to.match(/^dir_/);
+    });
+  });
+  test("each directory has a name", function() {
+    res.body.directories.forEach(function(d) {
+      expect(d.name).to.be.a("string");
+    });
+  });
+  test("each directory has a directory_type", function() {
+    res.body.directories.forEach(function(d) {
+      expect(d.directory_type).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each directory has an organization_id with org_ prefix", function() {
+    res.body.directories.forEach(function(d) {
+      expect(d.organization_id).to.match(/^org_/);
+    });
+  });
+  test("each directory has enabled as a boolean", function() {
+    res.body.directories.forEach(function(d) {
+      expect(d.enabled).to.be.a("boolean");
+    });
+  });
+  test("each directory has a directory_endpoint URL", function() {
+    res.body.directories.forEach(function(d) {
+      expect(d.directory_endpoint).to.match(/^https?:\/\//);
+    });
+  });
+}

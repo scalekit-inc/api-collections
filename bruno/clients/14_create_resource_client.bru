@@ -1,0 +1,36 @@
+meta {
+  name: Create Resource Client
+  type: http
+  seq: 14
+}
+post {
+  url: {{env_url}}/api/v1/resources/{{test_resourceid}}/clients
+  body: json
+  auth: inherit
+}
+body:json {
+  {
+    "name": "Acme Reports Client {{test_clients_ts}}",
+    "description": "Acme Corp automated reporting service account",
+    "scopes": ["reports:read"],
+    "audience": ["https://reports.acmecorp.com"],
+    "expiry": 3600
+  }
+}
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("test_resource_clientid", res.body.client.client_id);
+  }
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("client_id has m2m_ prefix", function() { expect(res.body.client.client_id).to.match(/^m2m_/); });
+  test("name matches", function() { expect(res.body.client.name).to.include("Acme Reports Client"); });
+  test("description matches", function() { expect(res.body.client.description).to.equal("Acme Corp automated reporting service account"); });
+  test("secrets array is present", function() { expect(res.body.client.secrets).to.be.an("array"); });
+  test("plain_secret is returned on creation", function() { expect(res.body.plain_secret).to.be.a("string").and.not.empty; });
+  test("scopes is an array", function() { expect(res.body.client.scopes).to.be.an("array"); });
+  test("audience is an array", function() { expect(res.body.client.audience).to.be.an("array"); });
+  test("create_time is present", function() { expect(res.body.client.create_time).to.exist; });
+  test("update_time is present", function() { expect(res.body.client.update_time).to.exist; });
+}

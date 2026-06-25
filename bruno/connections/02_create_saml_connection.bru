@@ -1,0 +1,40 @@
+meta {
+  name: Create SAML Connection
+  type: http
+  seq: 2
+}
+post {
+  url: {{env_url}}/api/v1/organizations/{{test_conn_orgid}}/connections
+  body: json
+  auth: inherit
+}
+body:json {
+  {
+    "provider": "ONELOGIN",
+    "type": "SAML"
+  }
+}
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("test_connectionid", res.body.connection.id);
+  }
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("connection is an object", function() { expect(res.body.connection).to.be.an("object"); });
+  test("id has conn_ prefix", function() { expect(res.body.connection.id).to.match(/^conn_/); });
+  test("provider is ONELOGIN", function() { expect(res.body.connection.provider).to.equal("ONELOGIN"); });
+  test("type is SAML", function() { expect(res.body.connection.type).to.equal("SAML"); });
+  test("status is DRAFT", function() { expect(res.body.connection.status).to.equal("DRAFT"); });
+  test("enabled is false", function() { expect(res.body.connection.enabled).to.equal(false); });
+  test("debug_enabled is a boolean", function() { expect(res.body.connection.debug_enabled).to.be.a("boolean"); });
+  test("organization_id matches", function() { expect(res.body.connection.organization_id).to.equal(bru.getEnvVar("test_conn_orgid")); });
+  test("configuration_type is a string", function() { expect(res.body.connection.configuration_type).to.be.a("string").and.not.empty; });
+  test("test_connection_uri is a URL", function() { expect(res.body.connection.test_connection_uri).to.match(/^https?:\/\//); });
+  test("saml_config is an object", function() { expect(res.body.connection.saml_config).to.be.an("object"); });
+  test("saml_config.sp_entity_id is a URL", function() { expect(res.body.connection.saml_config.sp_entity_id).to.match(/^https?:\/\//); });
+  test("saml_config.sp_assertion_url is a URL", function() { expect(res.body.connection.saml_config.sp_assertion_url).to.match(/^https?:\/\//); });
+  test("saml_config.sp_metadata_url is a URL", function() { expect(res.body.connection.saml_config.sp_metadata_url).to.match(/^https?:\/\//); });
+  test("create_time is present", function() { expect(res.body.connection.create_time).to.exist; });
+  test("update_time is present", function() { expect(res.body.connection.update_time).to.exist; });
+}

@@ -1,0 +1,56 @@
+meta {
+  name: List Interceptors
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{env_url}}/api/v1/interceptors
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("interceptors is an array", function() {
+    expect(res.body.interceptors).to.be.an("array");
+  });
+  test("total_size is a number", function() {
+    expect(res.body.total_size).to.be.a("number");
+  });
+  test("next_page_token is present", function() {
+    expect(res.body).to.have.property("next_page_token");
+  });
+  test("prev_page_token is present", function() {
+    expect(res.body).to.have.property("prev_page_token");
+  });
+  test("created interceptor appears in list", function() {
+    const ids = res.body.interceptors.map(function(i) { return i.id; });
+    expect(ids).to.include(bru.getEnvVar("test_interceptorid"));
+  });
+  test("each interceptor has id with icp_ prefix", function() {
+    res.body.interceptors.forEach(function(i) {
+      expect(i.id).to.match(/^icp_/);
+    });
+  });
+  test("each interceptor has display_name", function() {
+    res.body.interceptors.forEach(function(i) {
+      expect(i.display_name).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each interceptor has trigger_point", function() {
+    res.body.interceptors.forEach(function(i) {
+      expect(i.trigger_point).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each interceptor has enabled field", function() {
+    res.body.interceptors.forEach(function(i) {
+      expect(i).to.have.property("enabled");
+    });
+  });
+  test("total_size matches interceptors count or more", function() {
+    expect(res.body.total_size).to.be.at.least(res.body.interceptors.length);
+  });
+}

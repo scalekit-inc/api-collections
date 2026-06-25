@@ -1,0 +1,30 @@
+meta {
+  name: Update Email Template
+  type: http
+  seq: 5
+}
+patch {
+  url: {{env_url}}/api/v1/organizations/{{test_emails_orgid}}/email/templates/{{test_templateid}}
+  body: json
+  auth: inherit
+}
+body:json {
+  {
+    "subject": "Sign in to Acme Corp — Updated",
+    "html_content": "<h1>Updated!</h1><p>Sign in: {{magic_link}}</p>",
+    "plain_content": "Updated! Sign in: {{magic_link}}"
+  }
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("template is an object", function() { expect(res.body.template).to.be.an("object"); });
+  test("id is unchanged", function() { expect(res.body.template.id).to.equal(bru.getEnvVar("test_templateid")); });
+  test("id has tpl_ prefix", function() { expect(res.body.template.id).to.match(/^tpl_/); });
+  test("subject reflects update", function() { expect(res.body.template.subject).to.equal("Sign in to Acme Corp — Updated"); });
+  test("html_content reflects update", function() { expect(res.body.template.html_content).to.include("Updated"); });
+  test("plain_content reflects update", function() { expect(res.body.template.plain_content).to.include("Updated"); });
+  test("use_case is LOGIN", function() { expect(res.body.template.use_case).to.equal("LOGIN"); });
+  test("placeholders is an array", function() { expect(res.body.template.placeholders).to.be.an("array"); });
+  test("enabled is a boolean", function() { expect(res.body.template.enabled).to.be.a("boolean"); });
+  test("updated_at is present", function() { expect(res.body.template.updated_at).to.exist; });
+}

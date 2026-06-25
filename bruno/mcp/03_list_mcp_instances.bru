@@ -1,0 +1,47 @@
+meta {
+  name: List MCP Instances
+  type: http
+  seq: 3
+}
+get {
+  url: {{env_url}}/api/v1/mcp/instances
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("instances is an array", function() { expect(res.body.instances).to.be.an("array"); });
+  test("next_page_token field is present", function() { expect(res.body).to.have.property("next_page_token"); });
+  test("prev_page_token field is present", function() { expect(res.body).to.have.property("prev_page_token"); });
+  test("total_size is a non-negative number", function() { expect(res.body.total_size).to.be.a("number").and.at.least(0); });
+  test("each instance has an id string", function() {
+    res.body.instances.forEach(function(inst) {
+      expect(inst.id).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each instance has a name string", function() {
+    res.body.instances.forEach(function(inst) {
+      expect(inst.name).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each instance has a user_identifier string", function() {
+    res.body.instances.forEach(function(inst) {
+      expect(inst.user_identifier).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each instance has a config object", function() {
+    res.body.instances.forEach(function(inst) {
+      expect(inst.config).to.be.an("object");
+    });
+  });
+  test("each instance has an updated_at timestamp", function() {
+    res.body.instances.forEach(function(inst) {
+      expect(inst.updated_at).to.exist;
+    });
+  });
+  test("each instance has a url string", function() {
+    res.body.instances.forEach(function(inst) {
+      expect(inst.url).to.be.a("string").and.not.empty;
+    });
+  });
+}

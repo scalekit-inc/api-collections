@@ -1,0 +1,20 @@
+meta {
+  name: List Resources
+  type: http
+  seq: 13
+}
+get {
+  url: {{env_url}}/api/v1/resources?resource_type=WEB
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("resources is an array", function() { expect(res.body.resources).to.be.an("array"); });
+  test("total_size is a non-negative number", function() { expect(res.body.total_size).to.be.a("number").and.at.least(0); });
+  test("next_page_token is a string", function() { expect(res.body.next_page_token).to.be.a("string"); });
+  test("created resource appears in list", function() {
+    const ids = res.body.resources.map(function(r) { return r.id; });
+    expect(ids).to.include(bru.getEnvVar("test_resourceid"));
+  });
+}

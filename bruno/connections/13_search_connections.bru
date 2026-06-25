@@ -1,0 +1,54 @@
+meta {
+  name: Search Connections
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{env_url}}/api/v1/organizations/-/connections:search?query=OKTA&page_size=10
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("connections is an array", function() {
+    expect(res.body.connections).to.be.an("array");
+  });
+  test("total_size is a non-negative number", function() {
+    expect(res.body.total_size).to.be.a("number").and.at.least(0);
+  });
+  test("next_page_token is a string", function() {
+    expect(res.body.next_page_token).to.be.a("string");
+  });
+  test("prev_page_token is a string", function() {
+    expect(res.body.prev_page_token).to.be.a("string");
+  });
+  test("each connection has id with conn_ prefix", function() {
+    res.body.connections.forEach(function(c) {
+      expect(c.id).to.match(/^conn_/);
+    });
+  });
+  test("each connection has provider", function() {
+    res.body.connections.forEach(function(c) {
+      expect(c.provider).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each connection has type", function() {
+    res.body.connections.forEach(function(c) {
+      expect(c.type).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each connection has status", function() {
+    res.body.connections.forEach(function(c) {
+      expect(c.status).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each connection has organization_id", function() {
+    res.body.connections.forEach(function(c) {
+      expect(c.organization_id).to.be.a("string").and.not.empty;
+    });
+  });
+}

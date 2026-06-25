@@ -1,0 +1,23 @@
+meta {
+  name: Get User Management Settings
+  type: http
+  seq: 12
+}
+
+get {
+  url: {{env_url}}/api/v1/organizations/{{test_orgid}}/settings/usermanagement
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("response has settings object", function() {
+    expect(res.body.settings).to.be.an("object");
+  });
+  test("max_allowed_users field is present", function() {
+    expect(res.body.settings).to.have.property("max_allowed_users");
+  });
+}

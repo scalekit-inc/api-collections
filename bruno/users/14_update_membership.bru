@@ -1,0 +1,54 @@
+meta {
+  name: Update Membership
+  type: http
+  seq: 14
+}
+
+patch {
+  url: {{env_url}}/api/v1/memberships/organizations/{{test_users_orgid}}/users/{{test_userid}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "roles": [
+      { "name": "{{test_users_rolename}}" }
+    ],
+    "metadata": {
+      "team": "platform",
+      "access_level": "standard"
+    }
+  }
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("response has user object", function() {
+    expect(res.body.user).to.be.an("object");
+  });
+  test("user id is unchanged", function() {
+    expect(res.body.user.id).to.equal(bru.getEnvVar("test_userid"));
+  });
+  test("user email is unchanged", function() {
+    expect(res.body.user.email).to.equal(bru.getEnvVar("test_user_email"));
+  });
+  test("memberships is an array", function() {
+    expect(res.body.user.memberships).to.be.an("array").with.length.at.least(1);
+  });
+  test("membership for the org is present", function() {
+    const orgIds = res.body.user.memberships.map(function(m) { return m.organization_id; });
+    expect(orgIds).to.include(bru.getEnvVar("test_users_orgid"));
+  });
+  test("create_time is present", function() {
+    expect(res.body.user.create_time).to.exist;
+  });
+  test("update_time is present", function() {
+    expect(res.body.user.update_time).to.exist;
+  });
+  test("environment_id has env_ prefix", function() {
+    expect(res.body.user.environment_id).to.match(/^env_/);
+  });
+}

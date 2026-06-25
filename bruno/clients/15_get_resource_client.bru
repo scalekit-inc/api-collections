@@ -1,0 +1,19 @@
+meta {
+  name: Get Resource Client
+  type: http
+  seq: 15
+}
+get {
+  url: {{env_url}}/api/v1/resources/{{test_resourceid}}/clients/{{test_resource_clientid}}
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("client_id matches", function() { expect(res.body.client.client_id).to.equal(bru.getEnvVar("test_resource_clientid")); });
+  test("name is non-empty", function() { expect(res.body.client.name).to.be.a("string").and.not.empty; });
+  test("secrets is an array", function() { expect(res.body.client.secrets).to.be.an("array"); });
+  test("scopes is an array", function() { expect(res.body.client.scopes).to.be.an("array"); });
+  test("create_time is present", function() { expect(res.body.client.create_time).to.exist; });
+  test("update_time is present", function() { expect(res.body.client.update_time).to.exist; });
+}

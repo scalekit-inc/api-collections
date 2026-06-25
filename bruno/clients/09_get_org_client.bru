@@ -1,0 +1,20 @@
+meta {
+  name: Get Organization Client
+  type: http
+  seq: 9
+}
+get {
+  url: {{env_url}}/api/v1/organizations/{{test_clients_orgid}}/clients/{{test_org_clientid}}
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("client_id matches", function() { expect(res.body.client.client_id).to.equal(bru.getEnvVar("test_org_clientid")); });
+  test("name is non-empty", function() { expect(res.body.client.name).to.be.a("string").and.not.empty; });
+  test("secrets is an array", function() { expect(res.body.client.secrets).to.be.an("array"); });
+  test("scopes is an array", function() { expect(res.body.client.scopes).to.be.an("array"); });
+  test("audience is an array", function() { expect(res.body.client.audience).to.be.an("array"); });
+  test("create_time is present", function() { expect(res.body.client.create_time).to.exist; });
+  test("update_time is present", function() { expect(res.body.client.update_time).to.exist; });
+}

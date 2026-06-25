@@ -1,0 +1,13 @@
+meta {
+  name: Delete Domain
+  type: http
+  seq: 5
+}
+delete {
+  url: {{env_url}}/api/v1/organizations/{{test_domains_orgid}}/domains/{{test_domainid}}
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200 or 204", function() { expect(res.status).to.be.oneOf([200, 204]); });
+}

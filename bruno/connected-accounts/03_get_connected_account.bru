@@ -1,0 +1,22 @@
+meta {
+  name: Get Connected Account
+  type: http
+  seq: 3
+}
+get {
+  url: {{env_url}}/api/v1/connected_accounts/{{test_ca_id}}
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("response has connected_account object", function() { expect(res.body.connected_account).to.be.an("object"); });
+  test("id matches the created account", function() { expect(res.body.connected_account.id).to.equal(bru.getEnvVar("test_ca_id")); });
+  test("connector is gmail", function() { expect(res.body.connected_account.connector).to.equal("gmail"); });
+  test("provider is GMAIL", function() { expect(res.body.connected_account.provider).to.equal("GMAIL"); });
+  test("status is non-empty", function() { expect(res.body.connected_account.status).to.be.a("string").and.not.empty; });
+  test("authorization_type is non-empty", function() { expect(res.body.connected_account.authorization_type).to.be.a("string").and.not.empty; });
+  test("updated_at is present", function() { expect(res.body.connected_account.updated_at).to.exist; });
+  test("connection_id is a non-empty string", function() { expect(res.body.connected_account.connection_id).to.be.a("string").and.not.empty; });
+  test("identifier is a non-empty string", function() { expect(res.body.connected_account.identifier).to.be.a("string").and.not.empty; });
+}

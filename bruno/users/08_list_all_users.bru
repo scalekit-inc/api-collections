@@ -1,0 +1,43 @@
+meta {
+  name: List All Users
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{env_url}}/api/v1/users?page_size=10
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("users is an array", function() {
+    expect(res.body.users).to.be.an("array");
+  });
+  test("total_size is at least 1", function() {
+    expect(res.body.total_size).to.be.a("number").and.at.least(1);
+  });
+  test("next_page_token field is present", function() {
+    expect(res.body).to.have.property("next_page_token");
+  });
+  test("prev_page_token field is present", function() {
+    expect(res.body).to.have.property("prev_page_token");
+  });
+  test("created user appears in list", function() {
+    const ids = res.body.users.map(function(u) { return u.id; });
+    expect(ids).to.include(bru.getEnvVar("test_userid"));
+  });
+  test("each user has id with usr_ prefix", function() {
+    res.body.users.forEach(function(u) {
+      expect(u.id).to.match(/^usr_/);
+    });
+  });
+  test("each user has a non-empty email", function() {
+    res.body.users.forEach(function(u) {
+      expect(u.email).to.be.a("string").and.not.empty;
+    });
+  });
+}

@@ -1,0 +1,35 @@
+meta {
+  name: List Domains
+  type: http
+  seq: 4
+}
+get {
+  url: {{env_url}}/api/v1/organizations/{{test_domains_orgid}}/domains
+  body: none
+  auth: inherit
+}
+tests {
+  test("status is 200", function() { expect(res.status).to.equal(200); });
+  test("domains is an array", function() { expect(res.body.domains).to.be.an("array"); });
+  test("page_size is present", function() { expect(res.body.page_size).to.be.a("number"); });
+  test("page_number is present", function() { expect(res.body.page_number).to.be.a("number"); });
+  test("created domain appears in list", function() {
+    const ids = res.body.domains.map(function(d) { return d.id; });
+    expect(ids).to.include(bru.getEnvVar("test_domainid"));
+  });
+  test("each domain has id with dom_ prefix", function() {
+    res.body.domains.forEach(function(d) { expect(d.id).to.match(/^dom_/); });
+  });
+  test("each domain has a domain name", function() {
+    res.body.domains.forEach(function(d) { expect(d.domain).to.be.a("string").and.not.empty; });
+  });
+  test("each domain has organization_id", function() {
+    res.body.domains.forEach(function(d) { expect(d.organization_id).to.be.a("string").and.not.empty; });
+  });
+  test("each domain has verification_status", function() {
+    res.body.domains.forEach(function(d) { expect(d.verification_status).to.be.a("string").and.not.empty; });
+  });
+  test("each domain has domain_type", function() {
+    res.body.domains.forEach(function(d) { expect(d.domain_type).to.be.a("string").and.not.empty; });
+  });
+}

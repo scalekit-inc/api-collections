@@ -1,0 +1,25 @@
+meta {
+  name: Enable Directory
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{env_url}}/api/v1/organizations/{{test_dir_orgid}}/directories/{{test_directoryid}}:enable
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("enabled is true", function() {
+    expect(res.body.enabled).to.equal(true);
+  });
+  test("error_message is absent or empty on success", function() {
+    if (res.body.error_message !== undefined) {
+      expect(res.body.error_message).to.equal("");
+    }
+  });
+}

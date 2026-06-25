@@ -2,13 +2,18 @@
 
 [What is Bruno?](https://www.usebruno.com/)
 
-This directory is currently empty, but we're eager to fill it with valuable API collections for Bruno. If you're interested in seeing Bruno collections, please create an issue in this repository. Your feedback will help us prioritize and develop the most useful collections for the community.
+Ready-to-use Bruno collection for the Scalekit API. This is the same collection used internally for testing and ships with full request sequences, environments, and coverage of the current public surface (Organizations, Clients/M2M, Connections, Users, Directory/SCIM, Connected Accounts, MCP, Roles & Permissions, Tokens, Interceptors, Secrets, Sessions, etc.).
 
-**How to request a collection:**
+## Layout
 
-1. Go to the Issues tab in this repository.
-2. Click on the "New issue" button.
-3. Provide a clear description of the collection you'd like to see, including any specific endpoints or features you're interested in.
-4. We'll review your request and consider adding it to our roadmap.
+- Numbered files (e.g. `01_create_...`, `02_...`) indicate suggested execution order for complete flows.
+- Run `run.sh` (or open the collection in Bruno) after configuring an environment.
+- `environments/` contains ready configs for local, staging, US prod, EU prod.
 
-Thank you for your input, and we look forward to building a comprehensive set of Bruno API collections together!
+## Getting started
+
+1. Open Bruno and import (or open) the `bruno/` folder as a collection.
+2. Duplicate one of the environment files and fill in your Scalekit credentials (subdomain + API key / client secret).
+3. Start with the "Getting Started" style flow or any `01_create_org` + follow-ups.
+
+The collection is kept in sync from the authoritative copy in the Scalekit backend via the script in the `feedback-syndicate` meta-repo. See the root README for import instructions and the latest OpenAPI spec.

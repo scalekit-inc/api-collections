@@ -1,0 +1,31 @@
+meta {
+  name: List User Permissions
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{env_url}}/api/v1/organizations/{{test_users_orgid}}/users/{{test_userid}}/permissions
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("permissions is an array", function() {
+    expect(res.body.permissions).to.be.an("array");
+  });
+  test("each permission has id and name", function() {
+    res.body.permissions.forEach(function(p) {
+      expect(p.id).to.be.a("string").and.not.empty;
+      expect(p.name).to.be.a("string").and.not.empty;
+    });
+  });
+  test("each permission has a description string", function() {
+    res.body.permissions.forEach(function(p) {
+      expect(p.description).to.be.a("string");
+    });
+  });
+}

@@ -1,0 +1,36 @@
+meta {
+  name: Generate Portal Link
+  type: http
+  seq: 7
+}
+
+put {
+  url: {{env_url}}/api/v1/organizations/{{test_orgid}}/portal_links
+  body: none
+  auth: inherit
+}
+
+script:post-response {
+  if (res.status === 200 || res.status === 201) {
+    bru.setEnvVar("test_portal_link_id", res.body.link.id);
+  }
+}
+
+tests {
+  test("status is 200 or 201", function() {
+    expect(res.status).to.be.oneOf([200, 201]);
+  });
+  test("response has link object", function() {
+    expect(res.body.link).to.be.an("object");
+  });
+  test("link.id is a non-empty string", function() {
+    expect(res.body.link.id).to.be.a("string").and.not.empty;
+  });
+  test("link.location is a valid URL", function() {
+    expect(res.body.link.location).to.be.a("string").and.not.empty;
+    expect(res.body.link.location).to.match(/^https?:\/\//);
+  });
+  test("link.expire_time is present", function() {
+    expect(res.body.link.expire_time).to.exist;
+  });
+}
