@@ -11,7 +11,9 @@
 </h1>
 
 <p align="center">
-  <strong>Auth stack for AI apps ⚡ Ready-to-use API collections</strong>
+  <strong>Ready-to-use API collections</strong>
+
+Scalekit provides auth and actions on behalf of users, with 500+ connectors and 20,000+ tools.
 </p>
 
 <p align="center">
@@ -61,7 +63,7 @@ See the [Bruno README](./bruno/README.md) for details.
 - **Authentication & M2M**: OAuth 2.0 / client credentials, tokens, sessions
 - **Organizations & Users**: Full lifecycle, external IDs, memberships
 - **Connections (SSO)**: SAML, OIDC, discovery, enable/disable
-- **Connected Accounts** (Agent Auth): OAuth + static token flows for 100+ connectors
+- **Connected Accounts** (Agent Auth): OAuth + static token flows for 500+ connectors and 20,000+ tools
 - **Directory Sync (SCIM)**: Directories, users, groups, events
 - **Roles & Permissions / RBAC**
 - **MCP & Interceptors**: Model Context Protocol configs and request interceptors
